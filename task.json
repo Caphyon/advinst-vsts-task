@@ -1,0 +1,83 @@
+{
+  "id": "87e987f2-3e13-4d6e-9a3a-bb027f624d06",
+  "name": "AdvancedInstaller",
+  "friendlyName": "Advanced Installer",
+  "description": "Builds Advanced Installer project files (AIP).",
+  "category": "Build",
+  "author": "Caphyon",
+  "version": {
+    "Major": 1,
+    "Minor": 0,
+    "Patch": 0
+  },
+  
+  "minimumAgentVersion": "1.83.0",
+  "groups": [
+    {
+      "name": "advancedSettings",
+      "displayName": "Advanced Settings",
+      "isExpanded": false
+    }
+  ],
+  "inputs": [
+    {
+      "name": "aipPath",
+      "type": "filePath",
+      "label": "Aip Path",
+      "defaultValue": "",
+      "required": "true",
+      "helpMarkDown": "Relative path from the repository root to the Advanced Installer project file (AIP)."
+    },
+    {
+      "name": "aipBuild",
+      "type": "string",
+      "label": "Aip Build",
+      "defaultValue": "",
+      "required": "false",
+      "helpMarkDown": "Advanced Installer project build."
+    },
+    {
+      "name": "aipPackageName",
+      "type": "string",
+      "label": "Package Name",
+      "defaultValue": "",
+      "required": "false",
+      "groupName": "advancedSettings",
+      "helpMarkDown": "Output package name."
+    },
+    {
+      "name": "aipOutputFolder",
+      "type": "filePath",
+      "label": "Output Folder",
+      "defaultValue": "",
+      "required": "false",
+      "groupName": "advancedSettings",
+      "helpMarkDown": "Relative path from the repository root to the build output folder."
+    },
+    {
+      "name": "aipExtraCommands",
+      "type": "multiLine",
+      "label": "Commands",
+      "defaultValue": "",
+      "required": "false",
+      "groupName": "advancedSettings",
+      "helpMarkDown": "Advanced Installer edit commands that will be executed against the specified aip file.\nExample: SetVersion 1.2.3"
+    },
+    {
+      "name": "aipResetDigSign",
+      "type": "boolean",
+      "label": "Do not digitally sign package",
+      "defaultValue": "false",
+      "required": "false",
+      "groupName": "advancedSettings"
+    }
+  ],
+  "instanceNameFormat": "Advanced Installer $(packtarget)",
+  "execution": {
+    "PowerShell": {
+      "target": "$(currentDirectory)\\AdvinstTask.ps1",
+      "argumentFormat": "",
+      "workingDirectory": "$(currentDirectory)"
+    }
+  }
+}
