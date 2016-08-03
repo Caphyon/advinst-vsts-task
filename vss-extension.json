@@ -1,0 +1,78 @@
+{
+  "manifestVersion": 1,
+  "id": "AdvancedInstaller-BuildTask",
+  "version": "1.0.0",
+  "name": "Advanced Installer",
+  "description": "Tool for building Advanced Installer project files (AIP).",
+  "publisher": "Caphyon",
+  "targets": [
+    {
+      "id": "Microsoft.VisualStudio.Services"
+    }
+  ],
+  "categories": [
+    "Build and release"
+  ],
+  "links": {
+    "home": {
+      "uri": "https://www.advancedinstaller.com"
+    }
+  },
+  "tags": [
+    "build",
+    "advanced installer",
+    "aip"
+  ],
+  "icons": {
+    "default": "images/advinst-logo.png"
+  },
+  "screenshots": [
+    {
+      "path": "images/screen1.png"
+    },
+    {
+      "path": "images/screen2.png"
+    }
+  ],
+  "content": {
+    "details": {
+      "path": "README.md"
+    },
+    "license": {
+      "path": "LICENSE.md"
+    }
+  },
+  "galleryFlags": [
+    "Public"
+  ],
+  "files": [
+    {
+      "path": "task",
+      "addressable": true
+    },
+    {
+      "path": "images",
+      "addressable": true
+    },
+    {
+      "path": "README.md",
+      "addressable": true
+    },
+    {
+      "path": "LICENSE.md",
+      "addressable": true
+    }
+  ],
+  "contributions": [
+    {
+      "id": "Caphyon.AdvancedInstaller.BuildTask",
+      "type": "ms.vss-distributed-task.task",
+      "targets": [
+        "ms.vss-distributed-task.tasks"
+      ],
+      "properties": {
+        "name": "task"
+      }
+    }
+  ]
+}

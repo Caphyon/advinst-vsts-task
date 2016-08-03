@@ -2,7 +2,7 @@
   "id": "87e987f2-3e13-4d6e-9a3a-bb027f624d06",
   "name": "AdvancedInstaller",
   "friendlyName": "Advanced Installer",
-  "description": "Builds Advanced Installer project files (AIP).",
+  "description": "Tool for building Advanced Installer project files (AIP).",
   "category": "Build",
   "author": "Caphyon",
   "version": {
