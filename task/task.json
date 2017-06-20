@@ -7,7 +7,7 @@
   "author": "Caphyon",
   "version": {
     "Major": 1,
-    "Minor": 1,
+    "Minor": 2,
     "Patch": 0
   },
   
@@ -73,11 +73,9 @@
     }
   ],
   "instanceNameFormat": "Build Advanced Installer package $(aipPath)",
-  "execution": {
-    "PowerShell": {
-      "target": "$(currentDirectory)\\AdvinstTask.ps1",
-      "argumentFormat": "",
-      "workingDirectory": "$(currentDirectory)"
+   "execution": {
+        "PowerShell3": {
+            "target": "AdvinstTask.ps1"
+        }
     }
-  }
 }
