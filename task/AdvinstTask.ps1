@@ -9,6 +9,8 @@ $ErrorActionPreference = "Stop"
 $advinstCommandsFile = $null;
 
 try {
+  
+  Import-VstsLocStrings "$PSScriptRoot\task.json"
 
   # Get the inputs.
   $aipPath = Get-VstsInput -Name AipPath -Require
@@ -18,8 +20,9 @@ try {
   $aipExtraCommands = Get-VstsInput -Name AipExtraCommands
   $aipResetDigSign = Get-VstsInput -Name AipResetDigSign -AsBool
 
+  Write-VstsLogDetail  Get-VstsLocString -Key AI_StartTaskLog
+
   # Display input parameters 
-  Write-VstsTaskVerbose "Starting Advanced Installer build step."
   Write-VstsTaskVerbose "aipPath = $aipPath"
   Write-VstsTaskVerbose "aipBuild = $aipBuild"
   Write-VstsTaskVerbose "aipPackageName = $aipPackageName"
@@ -33,17 +36,17 @@ try {
 
   # Validate "aipPath" input parameter.
   if ([string]::IsNullOrWhitespace($aipPath) -or !(Test-Path $aipPath) ) {
-    throw (Get-LocalizedString -Key "The project file (AIP) not found at: $aipPath.")
+    throw (Get-VstsLocString -Key AI_AipNotFoundErr -ArgumentList $aipPath)
   }
 
   # Validate output package name
   if ( ![string]::IsNullOrWhitespace($aipPackageName) -and [string]::IsNullOrWhitespace($aipBuild)) {
-    throw (Get-LocalizedString -Key "Using a package output name requires a build to be specified")
+    throw (Get-VstsLocString -Key AI_BuildReqName)
   }
 
   # Validate output folder path
   if ( ![string]::IsNullOrWhitespace($aipOutputFolder) -and [string]::IsNullOrWhitespace($aipBuild)) {
-    throw (Get-LocalizedString -Key "Using a package output folder requires a build to be specified")
+    throw (Get-VstsLocString -Key AI_BuildReqFolder)
   }
 
   $advinstComPath = Get-AdvinstComPath
@@ -80,17 +83,17 @@ try {
   # Create the Advanced Installer commands file.
   $advinstCommandsFile = [System.IO.Path]::GetTempFileName()
   Write-VstsTaskVerbose "advinstCommandsFile = $advinstCommandsFile"
-  Create-AicFile -aicPath $advinstCommandsFile -aicCommands $advinstCommands
+  Write-AicFile -aicPath $advinstCommandsFile -aicCommands $advinstCommands
   Write-VstsTaskVerbose "advinstCommands = $advinstCommands"
 
   # Execute commands file 
   $advinstComArguments = [string]::Format("/execute ""{0}"" ""{1}""", $aipPath, $advinstCommandsFile)
-  Write-Host "Executing Advanced Installer..."
+  Write-VstsLogDetail Get-VstsLocString -Key AI_StartExeLog
   Invoke-VstsTool -FileName $advinstComPath -Arguments $advinstComArguments -RequireExitCodeZero
 
 }
 catch {
-  throw (Get-LocalizedString -Key "Failed to execute Advanced Installer")
+  Write-VstsTaskError (Get-VstsLocString -Key AI_ExecFailedErr -ArgumentList $_.Exception.Message)
 }
 finally {
   $ErrorActionPreference = $defaultErrorActionPreference
@@ -98,5 +101,5 @@ finally {
     Remove-Item $advinstCommandsFile
   }
   Trace-VstsLeavingInvocation $MyInvocation
-  Write-VstsTaskVerbose "Finished Advanced Installer build step."
+  Write-VstsLogDetail Get-VstsLocString -Key AI_FinishTaskLog
 }

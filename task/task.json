@@ -10,7 +10,6 @@
     "Minor": 2,
     "Patch": 0
   },
-  
   "minimumAgentVersion": "1.83.0",
   "groups": [
     {
@@ -73,9 +72,18 @@
     }
   ],
   "instanceNameFormat": "Build Advanced Installer package $(aipPath)",
-   "execution": {
-        "PowerShell3": {
-            "target": "AdvinstTask.ps1"
-        }
+  "execution": {
+    "PowerShell3": {
+      "target": "AdvinstTask.ps1"
     }
+  },
+  "messages": {
+    "AI_AipNotFoundErr": "The project file (AIP) not found at: '{0}'.",
+    "AI_BuildReqName": "Using a package output name requires a build to be specified.",
+    "AI_BuildReqFolder": "Using a package output folder requires a build to be specified.",
+    "AI_ExecFailedErr": "Failed to execute Advanced Installer Error: '{0}'",
+    "AI_StartExeLog": "Starting Advanced Installer...",
+    "AI_StartTaskLog": "Starting Advanced Installer build step.",
+    "AI_FinishTaskLog": "Finished Advanced Installer build step."
+  }
 }
