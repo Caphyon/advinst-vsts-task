@@ -20,7 +20,7 @@ try {
   $aipExtraCommands = Get-VstsInput -Name AipExtraCommands
   $aipResetDigSign = Get-VstsInput -Name AipResetDigSign -AsBool
 
-  Write-VstsLogDetail  Get-VstsLocString -Key AI_StartTaskLog
+  Write-VstsTaskVerbose(Get-VstsLocString -Key AI_StartTaskLog) -AsOutput
 
   # Display input parameters 
   Write-VstsTaskVerbose "aipPath = $aipPath"
@@ -35,9 +35,7 @@ try {
   . $PSScriptRoot\Write-AicFile.ps1
 
   # Validate "aipPath" input parameter.
-  if ([string]::IsNullOrWhitespace($aipPath) -or !(Test-Path $aipPath) ) {
-    throw (Get-VstsLocString -Key AI_AipNotFoundErr -ArgumentList $aipPath)
-  }
+  Assert-VstsPath -LiteralPath $aipPath
 
   # Validate output package name
   if ( ![string]::IsNullOrWhitespace($aipPackageName) -and [string]::IsNullOrWhitespace($aipBuild)) {
@@ -49,8 +47,10 @@ try {
     throw (Get-VstsLocString -Key AI_BuildReqFolder)
   }
 
+  # Validate the Advanced Installer command line tool path.
   $advinstComPath = Get-AdvinstComPath
   Write-VstsTaskVerbose "advinstComPath = $advinstComPath"
+  Assert-VstsPath -LiteralPath $advinstComPath
 
   # Compute the command switches
   $advinstCommands = @()
@@ -88,12 +88,13 @@ try {
 
   # Execute commands file 
   $advinstComArguments = [string]::Format("/execute ""{0}"" ""{1}""", $aipPath, $advinstCommandsFile)
-  Write-VstsLogDetail Get-VstsLocString -Key AI_StartExeLog
+  Write-VstsTaskVerbose(Get-VstsLocString -Key AI_StartExeLog) -AsOutput
   Invoke-VstsTool -FileName $advinstComPath -Arguments $advinstComArguments -RequireExitCodeZero
 
 }
 catch {
-  Write-VstsTaskError (Get-VstsLocString -Key AI_ExecFailedErr -ArgumentList $_.Exception.Message)
+  $errorMessage = $_.Exception.Message
+  Write-VstsTaskError (Get-VstsLocString -Key AI_ExecFailedErr -ArgumentList $errorMessage)
 }
 finally {
   $ErrorActionPreference = $defaultErrorActionPreference
@@ -101,5 +102,5 @@ finally {
     Remove-Item $advinstCommandsFile
   }
   Trace-VstsLeavingInvocation $MyInvocation
-  Write-VstsLogDetail Get-VstsLocString -Key AI_FinishTaskLog
+  Write-VstsTaskVerbose (Get-VstsLocString -Key AI_FinishTaskLog) -AsOutput
 }
