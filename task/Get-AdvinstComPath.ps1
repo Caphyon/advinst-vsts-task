@@ -8,6 +8,7 @@ Function Get-AdvinstComPath {
   Set-Variable advinstRegKeyPath -option Constant -value "HKLM:\SOFTWARE\Caphyon\Advanced Installer"
   Set-Variable advinstPathRegValue -Option Constant -value "Advanced Installer Path"
   Set-Variable advinstBinFolder -option Constant -value "bin\x86\AdvancedInstaller.com"
+  Set-Variable advinstTool  -option Constant -value "AdvancedInstaller.com"
   
   Trace-VstsEnteringInvocation $MyInvocation
 
@@ -19,9 +20,21 @@ Function Get-AdvinstComPath {
       $advinstRootPath = (Get-ItemProperty -Path advinstRegKeyPath -Name $advinstPathRegValue).$advinstPathRegValue
     }
   
-    # Compute whole path
+    # Compute whole path from the registry.
     $advinstComPath = Join-Path -Path $advinstRootPath -ChildPath $advinstBinFolder
-    return $advinstComPath
+    if ( Test-Path -Path $advinstComPath )
+    {
+      return $advinstComPath;
+    }
+
+    # Advanced Installer si not installed on the system. Check for the exe in PATH.
+    if ( Get-Command -Name advinstTool -ErrorAction SilentlyContinue )
+    {
+      return advinstTool;
+    } 
+
+    # Advanced Installer tool cannot be found 
+    return $null;
   }
   catch [System.Management.Automation.ItemNotFoundException] {
     Write-VstsTaskError -Verbose $_.Exception.Message

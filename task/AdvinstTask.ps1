@@ -50,8 +50,10 @@ try {
   # Validate the Advanced Installer command line tool path.
   $advinstComPath = Get-AdvinstComPath
   Write-VstsTaskVerbose "advinstComPath = $advinstComPath"
-  Assert-VstsPath -LiteralPath $advinstComPath
-
+  if ( [string]::IsNullOrWhitespace($advinstComPath) ) {
+    throw throw (Get-VstsLocString -Key AI_AdvinstNotFoundErr);
+  }
+  
   # Compute the command switches
   $advinstCommands = @()
   if ( ![string]::IsNullOrWhitespace($aipPackageName) ) {

@@ -84,6 +84,7 @@
     "AI_ExecFailedErr": "Failed to execute Advanced Installer task. Error: '{0}'",
     "AI_StartExeLog": "Starting Advanced Installer...",
     "AI_StartTaskLog": "Starting Advanced Installer build step.",
-    "AI_FinishTaskLog": "Finished Advanced Installer build step."
+    "AI_FinishTaskLog": "Finished Advanced Installer build step.",
+    "AI_AdvinstNotFoundErr": "Failed to detect Advanced Installer command line tool."
   }
 }
