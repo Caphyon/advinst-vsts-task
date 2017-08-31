@@ -38,29 +38,29 @@ try {
   Assert-VstsPath -LiteralPath $aipPath
 
   # Validate output package name
-  if ( ![string]::IsNullOrWhitespace($aipPackageName) -and [string]::IsNullOrWhitespace($aipBuild)) {
+  if ( ![string]::IsNullOrEmpty($aipPackageName) -and [string]::IsNullOrWhitespace($aipBuild)) {
     throw (Get-VstsLocString -Key AI_BuildReqName)
   }
 
   # Validate output folder path
-  if ( ![string]::IsNullOrWhitespace($aipOutputFolder) -and [string]::IsNullOrWhitespace($aipBuild)) {
+  if ( ![string]::IsNullOrEmpty($aipOutputFolder) -and [string]::IsNullOrWhitespace($aipBuild)) {
     throw (Get-VstsLocString -Key AI_BuildReqFolder)
   }
 
   # Validate the Advanced Installer command line tool path.
   $advinstComPath = Get-AdvinstComPath
   Write-VstsTaskVerbose "advinstComPath = $advinstComPath"
-  if ( [string]::IsNullOrWhitespace($advinstComPath) ) {
-    throw throw (Get-VstsLocString -Key AI_AdvinstNotFoundErr);
+  if ( [string]::IsNullOrEmpty($advinstComPath) ) {
+    throw (Get-VstsLocString -Key AI_AdvinstNotFoundErr);
   }
   
   # Compute the command switches
   $advinstCommands = @()
-  if ( ![string]::IsNullOrWhitespace($aipPackageName) ) {
+  if ( ![string]::IsNullOrEmpty($aipPackageName) ) {
     $advinstCommands += [string]::Format("SetPackageName ""{0}"" -buildname ""{1}""", $aipPackageName, $aipBuild)
   }
 
-  if ( ![string]::IsNullOrWhitespace($aipOutputFolder) ) {
+  if ( ![string]::IsNullOrEmpty($aipOutputFolder) ) {
     $advinstCommands += [string]::Format("SetOutputLocation -buildname ""{0}"" -path ""{1}""", $aipBuild, $aipOutputFolder)
   }
 
@@ -68,14 +68,14 @@ try {
     $advinstCommands += "ResetSig"
   }
 
-  if ( ![string]::IsNullOrWhitespace($aipExtraCommands) ) {
+  if ( ![string]::IsNullOrEmpty($aipExtraCommands) ) {
     $extraCommandsTokens = $aipExtraCommands.Split("`r`n")
     foreach ($token in $extraCommandsTokens) {
       $advinstCommands += $token;
     }
   }
 
-  if ( [string]::IsNullOrWhitespace($aipBuild) ) {
+  if ( [string]::IsNullOrEmpty($aipBuild) ) {
     $advinstCommands += "Build"
   }
   else {
@@ -92,7 +92,6 @@ try {
   $advinstComArguments = [string]::Format("/execute ""{0}"" ""{1}""", $aipPath, $advinstCommandsFile)
   Write-VstsTaskVerbose(Get-VstsLocString -Key AI_StartExeLog) -AsOutput
   Invoke-VstsTool -FileName $advinstComPath -Arguments $advinstComArguments -RequireExitCodeZero
-
 }
 catch {
   $errorMessage = $_.Exception.Message
@@ -100,7 +99,7 @@ catch {
 }
 finally {
   $ErrorActionPreference = $defaultErrorActionPreference
-  if (Test-Path $advinstCommandsFile) {
+  if ( $advinstCommandsFile -and (Test-Path $advinstCommandsFile) ) {
     Remove-Item $advinstCommandsFile
   }
   Trace-VstsLeavingInvocation $MyInvocation
