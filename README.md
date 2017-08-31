@@ -10,12 +10,12 @@ This plugin requires [Advanced Installer](http://www.advancedinstaller.com/) to 
 
 # How to use 
 
-The AI Build Task allows you to create a custom build step for TFS and VSTS. 
+The AI Build Task allows you to create a custom build step for TFS and VSTS.
 
-![Add Task](images/screen1.png)
+![Add Task](images/task-add.png)
 
 ![Add Tool Installer](images/tool-configure.png)
 
-![Build AI package](images/screen2.png)
+![Build AI package](images/task-configure.png)
 
 
