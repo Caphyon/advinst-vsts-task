@@ -17,6 +17,13 @@ try {
   $aipBuild = Get-VstsInput -Name AipBuild
   $aipPackageName = Get-VstsInput -Name AipPackageName
   $aipOutputFolder = Get-VstsInput -Name AipOutputFolder
+  # If you do not set a value, or set a value then remove your setting when you edit a build, 
+  # then you don’t get an empty string.You get the path to the BUILD_SOURCESDIRECTORY e.g. c:\agent\_work\3\s
+  # Reset this value to use it as needed.
+  if ($aipOutputFolder -eq $Env:BUILD_SOURCESDIRECTORY ) {
+    Write-VstsTaskDebug -Verbose "Reset AipOutputFolder. OLD:$aipOutputFolder NEW:(empty)." 
+    $aipOutputFolder = ""
+  }
   $aipExtraCommands = Get-VstsInput -Name AipExtraCommands
   $aipResetDigSign = Get-VstsInput -Name AipResetDigSign -AsBool
 

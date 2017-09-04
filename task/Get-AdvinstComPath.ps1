@@ -26,8 +26,8 @@ Function Get-AdvinstComPath {
   }
   
   # Compute whole path from the registry.
-  if ($advinstRootPath)
-  {
+  if ($advinstRootPath) {
+    Write-VstsTaskDebug -Verbose "Advanced Installer installation detected: $advinstRootPath" 
     $advinstComPath = Join-Path -Path $advinstRootPath -ChildPath $advinstBinFolder
     if ( Test-Path -Path $advinstComPath ) {
       return $advinstComPath
@@ -36,10 +36,12 @@ Function Get-AdvinstComPath {
 
   # Advanced Installer si not installed on the system. Check for the exe in PATH.
   if ( Get-Command -Name $advinstTool ) {
+    Write-VstsTaskDebug -Verbose "Advanced Installer detected in PATH" 
     return $advinstTool
   } 
   
-  # Advanced Installer tool cannot be found 
+  # Advanced Installer tool cannot be found
+  Write-VstsTaskDebug -Verbose "Advanced Installer not found"  
   Trace-VstsLeavingInvocation $MyInvocation
   return $null
 }
