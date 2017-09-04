@@ -16,3 +16,8 @@ Advanced Installer VSTS Task 1.2.1
 -----------------------
 
 * Search Advanced Installer in PATH if not found on system. 
+
+Advanced Installer VSTS Task 1.2.2
+-----------------------
+
+* Bug fix: Output Package Folder was initilized even if no user value specified.
