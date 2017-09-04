@@ -20,4 +20,4 @@ Advanced Installer VSTS Task 1.2.1
 Advanced Installer VSTS Task 1.2.2
 -----------------------
 
-* Bug fix: Output Package Folder was initilized even if no user value specified.
+* Bug fix: *Output Package Folder* field was initilized even if no user value specified. This caused Advanced Installer build to fail.
