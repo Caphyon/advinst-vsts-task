@@ -1,9 +1,9 @@
 {
   "manifestVersion": 1,
   "id": "AdvancedInstaller-BuildTask",
-  "version": "1.2.2",
-  "name": "Advanced Installer",
-  "description": "Powerful and easy to use Windows Installer authoring tool.",
+  "version": "1.2.3",
+  "name": "Advanced Installer Build",
+  "description": "Task for building setup packages using Advanced Installer.",
   "publisher": "Caphyon",
   "targets": [
     {
@@ -56,12 +56,17 @@
     "license": {
       "path": "LICENSE.md"
     },
-    "changes": {
+    "changelog": {
       "path": "CHANGELOG.md"
     }
   },
   "galleryFlags": [
     "Public"
+  ],
+  "galleryProperties": [
+    {
+      "markdownItParser": true
+    }
   ],
   "files": [
     {

@@ -1,14 +1,14 @@
 {
   "id": "87e987f2-3e13-4d6e-9a3a-bb027f624d06",
   "name": "AdvancedInstaller",
-  "friendlyName": "Advanced Installer",
-  "description": "Tool for building installers.",
+  "friendlyName": "Advanced Installer Build",
+  "description": "Build setup packages using Advanced Installer.",
   "category": "Package",
   "author": "Caphyon",
   "version": {
     "Major": 1,
     "Minor": 2,
-    "Patch": 2
+    "Patch": 3
   },
   "minimumAgentVersion": "1.83.0",
   "groups": [
