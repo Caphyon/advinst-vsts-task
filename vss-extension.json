@@ -1,7 +1,7 @@
 {
   "manifestVersion": 1,
   "id": "AdvancedInstaller-BuildTask",
-  "version": "1.2.3",
+  "version": "1.2.4",
   "name": "Advanced Installer Build",
   "description": "Task for building setup packages using Advanced Installer.",
   "publisher": "Caphyon",
