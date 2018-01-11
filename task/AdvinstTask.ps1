@@ -103,6 +103,7 @@ try {
 catch {
   $errorMessage = $_.Exception.Message
   Write-VstsTaskError (Get-VstsLocString -Key AI_ExecFailedErr -ArgumentList $errorMessage)
+  Write-VstsSetResult -Result "Failed" -Message (Get-VstsLocString -Key AI_ExecFailedErr -ArgumentList $errorMessage)
 }
 finally {
   $ErrorActionPreference = $defaultErrorActionPreference
