@@ -37,7 +37,8 @@
     "vsts-task-lib": "^2.6.0",
     "vsts-task-tool-lib": "^0.10.0",
     "semvish": "^1.1.0",
-    "compare-ver": "^2.0.2"
+    "compare-ver": "^2.0.2",
+    "registry-js": "1.0.7"
   },
   "devDependencies": {
     "@types/node": "^8.0.19",
