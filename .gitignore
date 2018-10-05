@@ -8,4 +8,6 @@ dist/
 node_modules/
 npm-debug.log
 
-AdvinstTool/*.js*
+*.js.map
+*.js
+package-lock.json
