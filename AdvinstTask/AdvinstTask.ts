@@ -12,7 +12,7 @@ async function run() {
     if (taskLib.osType() != 'Windows_NT')
       throw new Error(taskLib.loc("AI_UnsupportedOS"));
 
-    await runAquireAdvinst();
+    await runAcquireAdvinst();
     await runBuild();
 
   }

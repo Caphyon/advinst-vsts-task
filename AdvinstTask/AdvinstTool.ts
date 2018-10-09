@@ -18,7 +18,7 @@ const advinstDownloadUrlVar: string = 'advancedinstaller.url';
 const advinstLicenseSubPath: string = 'Caphyon\\Advanced Installer\\license80.dat';
 const advinstRegVersionSwitch: string = '14.6';
 
-export async function runAquireAdvinst() {
+export async function runAcquireAdvinst() {
   try {
     taskLib.setResourcePath(path.join(__dirname, "task.json"));
 
