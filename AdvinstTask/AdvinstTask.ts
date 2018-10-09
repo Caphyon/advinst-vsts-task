@@ -1,8 +1,8 @@
 import * as taskLib from 'vsts-task-lib/task';
-import * as toolLib from 'vsts-task-tool-lib/tool';
 
 import * as path from 'path';
 import { runBuild } from './AdvinstBuilder';
+import { runAquireAdvinst } from './AdvinstTool';
 
 
 async function run() {
@@ -12,8 +12,8 @@ async function run() {
     if (taskLib.osType() != 'Windows_NT')
       throw new Error(taskLib.loc("AI_UnsupportedOS"));
 
-    //runInstall();
-    runBuild();
+    await runAquireAdvinst();
+    await runBuild();
 
   }
   catch (error) {

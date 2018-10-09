@@ -86,6 +86,21 @@
     "AI_StartExeLog": "Starting Advanced Installer...",
     "AI_StartTaskLog": "Starting Advanced Installer build step.",
     "AI_FinishTaskLog": "Finished Advanced Installer build step.",
-    "AI_AdvinstNotFoundErr": "Failed to detect Advanced Installer command line tool."
+    "AI_AdvinstNotFoundErr": "Failed to detect Advanced Installer command line tool.",
+    "AI_InvalidVersionFormat": "Invalid version was specified. Version: %s",
+    "AI_InstallNewTool": "Cache does not contains this Advanced Installer version. Will be downloaded and installed.",
+    "AI_UseCachedTool": "Cached copy of AdvancedInstaller exists. No need to install afresh. Cached tool location: %s.",
+    "AI_RegisterTool": "Registering Advanced Installer.",
+    "AI_RegisterToolFailed": "Failed to register Advanced Installer. Error: %s",
+    "AI_AdvinstLicenseFile": "Advanced Installer license",
+    "AI_DownloadTool": "Downloading Advanced Installer. URL: %s",
+    "AI_DownloadToolFailed": "Failed to download Advanced Installer.",
+    "AI_ExtractTool" : "Extracting Advanced Installer",
+    "AI_ExtractToolFailed": "Failed to extract Advanced Installer.",
+    "AI_CacheTool": "Caching Advanced Installer tool.",
+    "AI_CacheToolSuccess" : "Successfully cached Advanced Installer tool. Version %s",
+    "AI_CheckToolCache": "Checking if a cached copy exists for this version...",
+    "AI_AgentTempDirAssert" : "Agent.TempDirectory is not set",
+    "AI_CreateInstallerFolder" : "The c:\\windows\\installer folder is missing. Attempting to create it."
   }
 }

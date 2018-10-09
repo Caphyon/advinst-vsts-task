@@ -1,6 +1,5 @@
 import { enumerateValues, HKEY, RegistryValueType } from 'registry-js'
 import taskLib = require('vsts-task-lib/task');
-import tmp = require('tmp');
 
 import * as path from 'path';
 
@@ -55,19 +54,26 @@ export async function runBuild(): Promise<void> {
   if (aipResetDigSign) {
     advinstCommands.push('ResetSig');
   }
- 
+
   if (aipExtraCommands.length > 0) {
     advinstCommands = advinstCommands.concat(aipExtraCommands);
   }
 
   advinstCommands.push(aipBuild ? `Build -buildslist \"${aipBuild}\"` : `Build`);
 
-  // Create the commands file
-  const commandsFilePath = getCommandsFile(advinstCommands);
-  const advinstCmdLineArgs: string[] = ['/execute', `${aipPath}`, `${commandsFilePath}`];
-  let result = taskLib.execSync(advinstToolPath, advinstCmdLineArgs);
-  if (result.code != 0) {
-    throw new Error(taskLib.loc("AI_ExecFailedErr", result.stdout));
+  //Execute the commands
+  try {
+    var commandsFilePath = getCommandsFile(advinstCommands);
+    const advinstCmdLineArgs: string[] = ['/execute', `${aipPath}`, `${commandsFilePath}`];
+    let result = taskLib.execSync(advinstToolPath, advinstCmdLineArgs);
+    if (result.code != 0) {
+      throw new Error(taskLib.loc("AI_ExecFailedErr", result.stdout));
+    }
+  }
+  finally {
+    if (commandsFilePath) {
+      taskLib.rmRF(commandsFilePath);
+    }
   }
 }
 
@@ -136,5 +142,3 @@ function _getAgentTemp() {
   }
   return tempDirectory;
 }
-
-runBuild()

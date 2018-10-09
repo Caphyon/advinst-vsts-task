@@ -38,7 +38,8 @@
     "vsts-task-tool-lib": "^0.10.0",
     "semvish": "^1.1.0",
     "compare-ver": "^2.0.2",
-    "registry-js": "1.0.7"
+    "registry-js": "1.0.7",
+    "winfileinfo": "1.0.0"
   },
   "devDependencies": {
     "@types/node": "^8.0.19",
