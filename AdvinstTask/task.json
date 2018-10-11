@@ -10,7 +10,12 @@
     "Minor": 2,
     "Patch": 5
   },
+  "instanceNameFormat": "Build Advanced Installer package $(aipPath)",
   "minimumAgentVersion": "2.115.0",
+  "runsOn": [
+    "Agent",
+    "DeploymentGroup"
+  ],
   "groups": [
     {
       "name": "advancedBuildSettings",
@@ -99,10 +104,14 @@
       "groupName": "advancedBuildSettings"
     }
   ],
-  "instanceNameFormat": "Build Advanced Installer package $(aipPath)",
   "execution": {
     "Node": {
       "target": "AdvinstTask.js"
+    }
+  },
+  "postjobexecution": {
+    "Node": {
+      "target": "AdvinstTaskCleanup.js"
     }
   },
   "messages": {

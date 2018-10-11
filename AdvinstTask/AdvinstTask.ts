@@ -2,7 +2,7 @@ import * as taskLib from 'vsts-task-lib/task';
 
 import * as path from 'path';
 import { runBuild } from './AdvinstBuilder';
-import { runAquireAdvinst } from './AdvinstTool';
+import { runAcquireAdvinst } from './AdvinstTool';
 
 
 async function run() {
