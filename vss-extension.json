@@ -61,7 +61,7 @@
     }
   },
   "galleryFlags": [
-    "Public"
+    "Private"
   ],
   "galleryProperties": [
     {
@@ -70,7 +70,7 @@
   ],
   "files": [
     {
-      "path": "AdvinstTask",
+      "path": "task",
       "addressable": true
     },
     {
