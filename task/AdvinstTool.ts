@@ -22,8 +22,11 @@ export async function runAcquireAdvinst() {
   try {
     taskLib.setResourcePath(path.join(__dirname, "task.json"));
 
-    let version: string = taskLib.getInput('advinstVersion', true);
-    let license: string = taskLib.getInput('advinstLicense', false);
+    const version: string = taskLib.getInput('advinstVersion', true);
+    const license: string = taskLib.getInput('advinstLicense', false);
+
+    taskLib.debug("advinstVersion = " + version);
+    taskLib.debug("advinstLicense  = " + license);
     await getAdvinst(version, license);
   }
   catch (error) {

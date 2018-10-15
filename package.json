@@ -4,12 +4,12 @@
   "version": "1.1.0",
   "scripts": {
     "initdev": "npm install",
-    "cleandev": "rimraf ./node_modules && rimraf package-lock.json",
+    "cleandev": "rimraf ./node_modules",
     "compile": "tsc -project task",
     "clean": "rimraf dist && rimraf ./task/*.js && rimraf ./task/*.js.map",
     "link": "mkdirp ./dist/task/node_modules && npm run link:copy && npm run link:install",
     "link:copy": "copyfiles ./node_modules/winfileinfo/*.node ./node_modules/registry-js/**/* ./dist/task/",
-    "link:install": "pushd dist\\task && npm install vsts-task-tool-lib@0.10.0 && npm install semvish@1.1.0 && npm install compare-ver@2.0.2 && popd",
+    "link:install": "pushd dist\\task && npm install vsts-task-lib@^2.7.0 && npm install vsts-task-tool-lib@^0.10.0 && npm install semvish@^1.1.0 && npm install compare-ver@^2.0.2 && popd",
     "content:task": "copyfiles ./task/*.js ./task/task.json ./task/*.png dist",
     "content:vsix": "copyfiles vss-extension.json *.md license.txt ./images/*.png dist",
     "content:all": "npm run content:task && npm run content:vsix",
@@ -39,14 +39,14 @@
     "semvish": "^1.1.0",
     "vsts-task-lib": "^2.7.0",
     "vsts-task-tool-lib": "^0.10.0",
-    "winfileinfo": "1.0.0"
+    "winfileinfo": "^1.0.0"
   },
   "devDependencies": {
     "@types/node": "^8.0.19",
     "copyfiles": "^1.2.0",
     "mkdirp": "^0.5.1",
     "rimraf": "^2.6.1",
-    "tfx-cli": "^0.4.9",
-    "typescript": "^2.4.2"
+    "tfx-cli": "^0.6.3",
+    "typescript": "^2.7.2"
   }
 }
