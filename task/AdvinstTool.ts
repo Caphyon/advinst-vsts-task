@@ -1,6 +1,8 @@
 import * as taskLib from 'vsts-task-lib/task';
 import * as toolLib from 'vsts-task-tool-lib/tool';
 
+import { enumerateValues, HKEY, RegistryValueType } from 'registry-js'
+
 import * as path from 'path';
 import * as semvish from 'semvish';
 import * as cmpVer from 'compare-ver';
@@ -18,9 +20,37 @@ const advinstDownloadUrlVar: string = 'advancedinstaller.url';
 const advinstLicenseSubPath: string = 'Caphyon\\Advanced Installer\\license80.dat';
 const advinstRegVersionSwitch: string = '14.6';
 
-export async function runAcquireAdvinst() {
+const advinstWowRegKeyPath: string = 'SOFTWARE\\Wow6432Node\\Caphyon\\Advanced Installer';
+const advinstRegKeyPath: string = 'SOFTWARE\\Caphyon\\Advanced Installer';
+const advinstPathRegValue: string = 'Advanced Installer Path';
+
+export async function getAdvinstComTool(): Promise<string> {
+  
+  let toolPath: string = getAdvinstPathFromReg();
+  // Use local copy of Advanced Installer. It is pre-deployed on the agent.  
+  if ( toolPath )
+  {
+    taskLib.debug(taskLib.loc('AI_UseFromPATH', toolPath));
+    return toolPath;
+  }
+
+  // Download Advanced Installer and cachet it.
+  await runAcquireAdvinst();
+  return advinstToolCmdLineUtility;
+  
+}
+
+export function _getAgentTemp() {
+  taskLib.assertAgent('2.115.0');
+  let tempDirectory = taskLib.getVariable('Agent.TempDirectory');
+  if (!tempDirectory) {
+    throw new Error(taskLib.loc("AI_AgentTempDirAssert"));
+  }
+  return tempDirectory;
+}
+
+async function runAcquireAdvinst() {
   try {
-    taskLib.setResourcePath(path.join(__dirname, "task.json"));
 
     const version: string = taskLib.getInput('advinstVersion', true);
     const license: string = taskLib.getInput('advinstLicense', false);
@@ -156,11 +186,24 @@ async function _extractAdvinst(sourceMsi: string): Promise<string> {
   return msiExtractionPath;
 }
 
-function _getAgentTemp() {
-  taskLib.assertAgent('2.115.0');
-  let tempDirectory = taskLib.getVariable('Agent.TempDirectory');
-  if (!tempDirectory) {
-    throw new Error(taskLib.loc("AI_AgentTempDirAssert"));
+function getAdvinstPathFromReg(): string {
+
+  // Advinst registry constants
+  let advinstComPath: string = null;
+  // Search the Advanced Installer root path in in both redirected and non-redirected hives.
+  const wowRegs = enumerateValues(HKEY.HKEY_LOCAL_MACHINE, advinstWowRegKeyPath).filter(function (reg) { return reg.name === advinstPathRegValue });
+  if (wowRegs.length > 0) {
+    advinstComPath = path.join(wowRegs[0].data.toString(), advinstToolSubPath, advinstToolCmdLineUtility)
   }
-  return tempDirectory;
+  // Search the Advanced Installer root path in in both redirected and non-redirected hives.
+  const regs = enumerateValues(HKEY.HKEY_LOCAL_MACHINE, advinstRegKeyPath).filter(function (reg) { return reg.name === advinstPathRegValue });
+  if (regs.length > 0) {
+    advinstComPath = path.join(regs[0].data.toString(),  advinstToolSubPath, advinstToolCmdLineUtility)
+  }
+
+  if (taskLib.exist(advinstComPath)) {
+    return advinstComPath;
+  }
+
+  return null;
 }

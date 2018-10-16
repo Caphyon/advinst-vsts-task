@@ -57,7 +57,7 @@
       "defaultValue": "",
       "required": "true",
       "helpMarkDown": "Relative path from the repository root to the Advanced Installer project file (AIP).",
-      "groupName" : "projectSettings"
+      "groupName": "projectSettings"
     },
     {
       "name": "aipBuild",
@@ -66,7 +66,7 @@
       "defaultValue": "",
       "required": "false",
       "helpMarkDown": "Advanced Installer project build to use, like DefaultBuild.",
-      "groupName" : "projectSettings"
+      "groupName": "projectSettings"
     },
     {
       "name": "aipPackageName",
@@ -132,12 +132,15 @@
     "AI_AdvinstLicenseFile": "Advanced Installer license",
     "AI_DownloadTool": "Downloading Advanced Installer. URL: %s",
     "AI_DownloadToolFailed": "Failed to download Advanced Installer.",
-    "AI_ExtractTool" : "Extracting Advanced Installer",
+    "AI_ExtractTool": "Extracting Advanced Installer",
     "AI_ExtractToolFailed": "Failed to extract Advanced Installer.",
     "AI_CacheTool": "Caching Advanced Installer tool.",
-    "AI_CacheToolSuccess" : "Successfully cached Advanced Installer tool. Version %s",
+    "AI_CacheToolSuccess": "Successfully cached Advanced Installer tool. Version %s",
     "AI_CheckToolCache": "Checking if a cached copy exists for this version...",
-    "AI_AgentTempDirAssert" : "Agent.TempDirectory is not set",
-    "AI_CreateInstallerFolder" : "The c:\\windows\\installer folder is missing. Attempting to create it."
+    "AI_AgentTempDirAssert": "Agent.TempDirectory is not set",
+    "AI_CreateInstallerFolder": "The c:\\windows\\installer folder is missing. Attempting to create it.",
+    "AI_UseFromPATH": "Using cached Advanced Installer from PATH.",
+    "AI_UseFromReg": "Using local copy of Advanced Installer. Path: %s",
+    "AI_AdvinstNotCachedErr": "Failed to detect Advanced Installer in PATH"
   }
 }
