@@ -1,5 +1,4 @@
 import * as taskLib from 'vsts-task-lib/task';
-
 import * as path from 'path';
 import { runBuild } from './AdvinstBuilder';
 
@@ -11,7 +10,6 @@ async function run() {
       throw new Error(taskLib.loc("AI_UnsupportedOS"));
 
     await runBuild();
-
   }
   catch (error) {
     taskLib.setResult(taskLib.TaskResult.Failed, error.message);

@@ -1,13 +1,14 @@
 import * as taskLib from 'vsts-task-lib/task';
 import * as toolLib from 'vsts-task-tool-lib/tool';
-
-import { enumerateValues, HKEY, RegistryValueType } from 'registry-js'
-
 import * as path from 'path';
 import * as semvish from 'semvish';
 import * as cmpVer from 'compare-ver';
+import * as ini from 'ini-parser';
+import * as fs from 'fs';
+import { enumerateValues, HKEY, RegistryValueType } from 'registry-js'
 var fileInfo = require('winfileinfo/winfileinfo.node');
 
+// String constants
 const advinstToolId: string = 'advinst';
 const advinstToolArch: string = 'x86';
 const advinstToolSubPath: string = 'bin\\x86';
@@ -25,19 +26,18 @@ const advinstRegKeyPath: string = 'SOFTWARE\\Caphyon\\Advanced Installer';
 const advinstPathRegValue: string = 'Advanced Installer Path';
 
 export async function getAdvinstComTool(): Promise<string> {
-  
-  let toolPath: string = getAdvinstPathFromReg();
+
+  let toolPath: string = _getAdvinstPathFromReg();
   // Use local copy of Advanced Installer. It is pre-deployed on the agent.  
-  if ( toolPath )
-  {
-    taskLib.debug(taskLib.loc('AI_UseFromPATH', toolPath));
+  if (toolPath) {
+    taskLib.debug(taskLib.loc('AI_UseFromReg', toolPath));
     return toolPath;
   }
 
   // Download Advanced Installer and cachet it.
+  taskLib.debug(taskLib.loc('AI_UseFromPATH'));
   await runAcquireAdvinst();
   return advinstToolCmdLineUtility;
-  
 }
 
 export function _getAgentTemp() {
@@ -50,18 +50,17 @@ export function _getAgentTemp() {
 }
 
 async function runAcquireAdvinst() {
-  try {
+  let version: string = taskLib.getInput('advinstVersion', false);
+  const license: string = taskLib.getInput('advinstLicense', false);
 
-    const version: string = taskLib.getInput('advinstVersion', true);
-    const license: string = taskLib.getInput('advinstLicense', false);
+  if (!version) {
+    version = await _getLatestVersion();
+    taskLib.debug(taskLib.loc("AI_UseLatestVersion", version));
+  }
 
-    taskLib.debug("advinstVersion = " + version);
-    taskLib.debug("advinstLicense  = " + license);
-    await getAdvinst(version, license);
-  }
-  catch (error) {
-    taskLib.setResult(taskLib.TaskResult.Failed, error.message);
-  }
+  taskLib.debug("advinstVersion = " + version);
+  taskLib.debug("advinstLicense  = " + license);
+  await getAdvinst(version, license);
 }
 
 async function getAdvinst(version: string, license: string): Promise<void> {
@@ -150,8 +149,9 @@ function _getLocalTool(version: string) {
 
 async function _downloadAdvinst(version: string): Promise<string> {
   let advinstDownloadUrl: string = taskLib.getVariable(advinstDownloadUrlVar);
-  if (!advinstDownloadUrl)
+  if (!advinstDownloadUrl) {
     advinstDownloadUrl = 'https://www.advancedinstaller.com/downloads/' + version + '/advinst.msi';
+  }
 
   console.log(taskLib.loc("AI_DownloadTool", advinstDownloadUrl));
   return toolLib.downloadTool(advinstDownloadUrl);
@@ -181,12 +181,19 @@ async function _extractAdvinst(sourceMsi: string): Promise<string> {
   let exitCode = taskLib.execSync('msiexec.exe', msiexecArguments).code;
   if (exitCode != 0) {
     taskLib.command('task.uploadfile', {}, msiLogPath);
-    return '';
+    return null;
   }
   return msiExtractionPath;
 }
 
-function getAdvinstPathFromReg(): string {
+async function _getLatestVersion(): Promise<string> {
+  let versionsFile: string = await toolLib.downloadTool('https://www.advancedinstaller.com/downloads/updates.ini');
+  let iniContent = ini.parse(fs.readFileSync(versionsFile, 'utf-8'));
+  let firstSection = iniContent[Object.keys(iniContent)[0]];
+  return firstSection['ProductVersion'];
+}
+
+function _getAdvinstPathFromReg(): string {
 
   // Advinst registry constants
   let advinstComPath: string = null;
@@ -198,7 +205,7 @@ function getAdvinstPathFromReg(): string {
   // Search the Advanced Installer root path in in both redirected and non-redirected hives.
   const regs = enumerateValues(HKEY.HKEY_LOCAL_MACHINE, advinstRegKeyPath).filter(function (reg) { return reg.name === advinstPathRegValue });
   if (regs.length > 0) {
-    advinstComPath = path.join(regs[0].data.toString(),  advinstToolSubPath, advinstToolCmdLineUtility)
+    advinstComPath = path.join(regs[0].data.toString(), advinstToolSubPath, advinstToolCmdLineUtility)
   }
 
   if (taskLib.exist(advinstComPath)) {
