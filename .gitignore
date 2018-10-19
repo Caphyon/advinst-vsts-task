@@ -8,6 +8,6 @@ dist/
 node_modules/
 npm-debug.log
 
-*.js.map
-*.js
+task/*.js.map
+task/*.js
 package-lock.json
