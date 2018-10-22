@@ -1,10 +1,10 @@
 {
   "manifestVersion": 1,
   "id": "AdvancedInstaller-BuildTask",
-  "version": "1.2.5",
+  "version": "2.0.0",
   "name": "Advanced Installer Build",
   "description": "Task for building setup packages using Advanced Installer.",
-  "publisher": "Caphyon",
+  "publisher": "caphyon",
   "targets": [
     {
       "id": "Microsoft.VisualStudio.Services"
@@ -61,7 +61,7 @@
     }
   },
   "galleryFlags": [
-    "Public"
+    "Private"
   ],
   "galleryProperties": [
     {

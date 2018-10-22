@@ -36,3 +36,8 @@ Bugs:
 
 Bugs:
 * Removed "Build required" validation, when specifying output path or package name, as some AI projects (E.g. patch, msm) do not use builds.
+
+### Advanced Installer Build Task 2.0.0
+
+Features:
+* Added support for caching Advanced Installer on the build agent prior to build. Now this extension encompasses the capabilities of [Advanced Installer Tool Installer](https://marketplace.visualstudio.com/items?itemName=caphyon.AdvancedInstallerTool)

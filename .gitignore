@@ -1,2 +1,13 @@
+dist/
+/.vscode/
+
+/.vs
 *.vsix
-.vscode
+.taskkey
+
+node_modules/
+npm-debug.log
+
+task/*.js.map
+task/*.js
+package-lock.json
