@@ -3,8 +3,8 @@
   "description": "Advanced Installer Task",
   "version": "1.1.0",
   "scripts": {
-    "dev:init": "npm install",
-    "dev:clean": "rmdir /Q /S node_modules",
+    "init:dev": "npm install",
+    "clean:dev": "rmdir /Q /S node_modules",
     "compile": "tsc -project task",
     "clean": "rimraf dist && rimraf ./task/*.js && rimraf ./task/*.js.map",
     "link": "mkdirp ./dist/task/node_modules && npm run link:copy && npm run link:install",
@@ -15,7 +15,7 @@
     "content:all": "npm run content:task && npm run content:vsix",
     "build": "npm run clean && npm run compile && npm run content:all && npm run link",
     "vsix:release": "tfx extension create --root dist --output-path dist --override {\\\"public\\\":true}",
-    "vsix:preview": "tfx extension create --extension-id AdvancedInstaller-Preview --root dist --output-path dist --override {\\\"name\\\":\\\"Preview Advanced Installer Build\\\", \\\"publisher\\\":\\\"caphyon-test\\\"} --rev-version",
+    "vsix:preview": "tfx extension create --extension-id AdvancedInstaller-Preview --root dist --output-path dist --override {\\\"name\\\":\\\"Preview Advanced Installer \\\", \\\"publisher\\\":\\\"caphyon-test\\\"} --rev-version",
     "package:release": "npm run build && npm run vsix:release",
     "package:preview": "npm run build && npm run vsix:preview",
     "version": "node ./scripts/version.js"
