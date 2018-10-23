@@ -53,6 +53,13 @@ async function runAcquireAdvinst() {
   let version: string = taskLib.getInput('advinstVersion', false);
   const license: string = taskLib.getInput('advinstLicense', false);
 
+  const cachedVersions: string[] = toolLib.findLocalToolVersions(advinstToolId, advinstToolArch)
+  if ( !version && cachedVersions )
+  {
+    taskLib.debug("Advanced Installer is already cached. Version: " + cachedVersions);
+    return;
+  }
+
   if (!version) {
     version = await _getLatestVersion();
     taskLib.debug(taskLib.loc("AI_UseLatestVersion", version));
