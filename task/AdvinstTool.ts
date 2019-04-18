@@ -53,16 +53,18 @@ async function runAcquireAdvinst() {
   let version: string = taskLib.getInput('advinstVersion', false);
   const license: string = taskLib.getInput('advinstLicense', false);
 
-  const cachedVersions: string[] = toolLib.findLocalToolVersions(advinstToolId, advinstToolArch)
-  if ( !version && cachedVersions )
-  {
-    taskLib.debug("Advanced Installer is already cached. Version: " + cachedVersions);
-    return;
-  }
-
   if (!version) {
     version = await _getLatestVersion();
     taskLib.debug(taskLib.loc("AI_UseLatestVersion", version));
+  }
+
+  if (!version) {
+    let cachedVersions: string[] = toolLib.findLocalToolVersions(advinstToolId, advinstToolArch)
+    if (cachedVersions.length > 0) {
+      // Use the latest cached version.
+      version = cachedVersions.sort().reverse()[0];
+      taskLib.debug("Latest cached version: " + version); 
+    }
   }
 
   taskLib.debug("advinstVersion = " + version);
