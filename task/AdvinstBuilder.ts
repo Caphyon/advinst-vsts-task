@@ -1,5 +1,5 @@
 import { getAdvinstComTool, _getAgentTemp } from './AdvinstTool';
-import taskLib = require('vsts-task-lib/task');
+import * as taskLib from 'azure-pipelines-task-lib/task';
 
 import * as path from 'path';
 
