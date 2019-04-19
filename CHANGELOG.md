@@ -41,3 +41,11 @@ Bugs:
 
 Features:
 * Added support for caching Advanced Installer on the build agent prior to build. Now this extension encompasses the capabilities of [Advanced Installer Tool Installer](https://marketplace.visualstudio.com/items?itemName=caphyon.AdvancedInstallerTool)
+
+### Advanced Installer Build Task 2.0.1
+
+Improvements:
+* Switch to the modern *azure-pipelines-task-lib* and *azure-pipelines-tool-lib* libraries.
+
+Bugs:
+* Fixed issue that caused the pipeline to fail when an Advanced Installer version was not specified. 

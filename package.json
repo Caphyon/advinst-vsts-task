@@ -39,7 +39,7 @@
     "azure-pipelines-tool-lib": "^0.12.0",
     "compare-ver": "^2.0.2",
     "ini-parser": "^0.0.2",
-    "registry-js": "^1.0.7",
+    "registry-js": "1.0.7",
     "semvish": "^1.1.0",
     "winfileinfo": "^1.0.0"
   },
