@@ -3,8 +3,12 @@ import * as path from 'path';
 
 async function run() {
   try {
-    if (taskLib.osType() != 'Windows_NT')
-      throw new Error('Only Windows systems are supported.');
+    taskLib.setResourcePath(path.join(__dirname, "task.json"));
+    if (taskLib.osType() != 'Windows_NT') {
+      console.log(taskLib.loc("AI_UnsupportedOS"));
+      return;
+    }
+
 
     const performCleanup: string = taskLib.getVariable('advinst.cleanup');
     taskLib.debug('advinst.cleanup = ' + performCleanup);
