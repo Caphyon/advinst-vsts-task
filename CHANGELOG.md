@@ -51,5 +51,11 @@ Bugs:
 * Fixed issue that caused the pipeline to fail when an Advanced Installer version was not specified.
 
 ### Advanced Installer Build Task 2.0.2
+
 Bugs:
 * *Postjobexecution* script will *not fail* on an unsupported agent OS
+
+### Advanced Installer Build Task 2.0.3
+
+Bugs:
+* Pipeline hangs when the Advanced Installer extraction folder contains spaces
