@@ -186,9 +186,15 @@ async function _extractAdvinst(sourceMsi: string): Promise<string> {
     taskLib.mkdirP(advinstWorkFolder);
   let msiLogPath: string = path.join(advinstWorkFolder, 'advinst_install.log');
 
-  let msiexecArguments: string[] = ['/a', sourceMsi, 'TARGETDIR=' + msiExtractionPath, '/qn', '/l*v', msiLogPath];
+  let msiexecArguments: string[] = [
+    '/a',
+    '"' + sourceMsi + '"',
+    'TARGETDIR="' + msiExtractionPath + '"',
+    '/qn',
+    '/l*v',
+    '"' + msiLogPath + '"'];
 
-  let exitCode = taskLib.execSync('msiexec.exe', msiexecArguments).code;
+  let exitCode = taskLib.execSync('msiexec.exe', msiexecArguments, { windowsVerbatimArguments: true }).code;
   if (exitCode != 0) {
     taskLib.command('task.uploadfile', {}, msiLogPath);
     return null;
