@@ -59,3 +59,8 @@ Bugs:
 
 Bugs:
 * Pipeline hangs when the Advanced Installer extraction folder contains spaces
+
+### Advanced Installer Build Task 2.0.4
+
+Bugs:
+* *Output Package Folder* field was initialized even if no user value specified. This caused Advanced Installer Build task to fail.

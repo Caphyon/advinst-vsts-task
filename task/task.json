@@ -8,7 +8,7 @@
   "version": {
     "Major": 2,
     "Minor": 0,
-    "Patch": 3
+    "Patch": 4
   },
   "instanceNameFormat": "Build Advanced Installer package $(aipPath)",
   "minimumAgentVersion": "2.115.0",
@@ -79,12 +79,12 @@
     },
     {
       "name": "aipOutputFolder",
-      "type": "filePath",
+      "type": "string",
       "label": "Output Package Folder",
       "defaultValue": "",
       "required": "false",
       "groupName": "advancedBuildSettings",
-      "helpMarkDown": "Relative path from the repository root to the package output folder."
+      "helpMarkDown": "The result package location."
     },
     {
       "name": "aipExtraCommands",
