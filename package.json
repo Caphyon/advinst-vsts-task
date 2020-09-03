@@ -44,7 +44,7 @@
     "winfileinfo": "^1.0.0"
   },
   "devDependencies": {
-    "@types/node": "^8.0.19",
+    "@types/node": "12.12.6",
     "copyfiles": "^1.2.0",
     "eol": "^0.9.1",
     "mkdirp": "^0.5.1",
