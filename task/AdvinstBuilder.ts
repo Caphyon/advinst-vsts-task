@@ -8,11 +8,11 @@ export async function runBuild(): Promise<void> {
   const aipPath: string = taskLib.getPathInput('AipPath', true, false);
   let aipBuild: string = taskLib.getInput('AipBuild');
   let aipPackageName: string = taskLib.getInput('AipPackageName');
-  let aipOutputFolder: string = taskLib.getInput('AipOutputFolder');
+  let aipOutputFolder: string = taskLib.getPathInput('AipOutputFolder', false, false);
 
-  if (aipOutputFolder == taskLib.getVariable('BUILD_SOURCESDIRECTORY')) {
+  if (!taskLib.filePathSupplied('AipOutputFolder')) {
     taskLib.debug("Reset AipOutputFolder. OLD: $aipOutputFolder NEW:(empty).");
-    aipOutputFolder = ""
+    aipOutputFolder = "";
   }
 
   const aipExtraCommands: string[] = taskLib.getDelimitedInput('AipExtraCommands', '\r\n');
