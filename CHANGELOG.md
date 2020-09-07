@@ -64,3 +64,8 @@ Bugs:
 
 Bugs:
 * *Output Package Folder* field was initialized even if no user value specified. This caused Advanced Installer Build task to fail.
+
+### Advanced Installer Build Task 2.0.5
+
+Bugs:
+* Fixed bug introduced in *2.0.4* which caused pipelines that had *Output Package Folder* set to a relative path to fail.
