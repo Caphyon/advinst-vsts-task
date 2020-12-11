@@ -4,14 +4,20 @@ import * as path from 'path';
 async function run() {
   try {
     taskLib.setResourcePath(path.join(__dirname, "task.json"));
-    if (taskLib.osType() != 'Windows_NT') {
+    if (taskLib.getPlatform() != taskLib.Platform.Windows) {
       console.log(taskLib.loc("AI_UnsupportedOS"));
       return;
     }
 
+    // Skip cleanup if the advancedinstaller.cleanup is set to false. We need to skip
+    // license file deletion when several tasks run in paralel
+    let performCleanup: string = taskLib.getVariable('advancedinstaller.cleanup');
+    if (performCleanup && performCleanup.toLowerCase() == 'false') {
+      console.log(taskLib.loc("AI_CleanupDisabled", performCleanup));
+      return;
+    }
 
-    const performCleanup: string = taskLib.getVariable('advinst.cleanup');
-    taskLib.debug('advinst.cleanup = ' + performCleanup);
+    performCleanup = taskLib.getVariable('advinst.cleanup');
     if (!performCleanup) {
       return;
     }

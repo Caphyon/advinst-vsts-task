@@ -6,7 +6,7 @@ async function run() {
   try {
     taskLib.setResourcePath(path.join(__dirname, "task.json"));
 
-    if (taskLib.osType() != 'Windows_NT')
+    if (taskLib.getPlatform() != taskLib.Platform.Windows)
       throw new Error(taskLib.loc("AI_UnsupportedOS"));
 
     await runBuild();

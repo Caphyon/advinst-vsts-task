@@ -142,6 +142,7 @@
     "AI_UseFromPATH": "Using cached Advanced Installer from PATH.",
     "AI_UseFromReg": "Using local copy of Advanced Installer. Path: %s",
     "AI_AdvinstNotCachedErr": "Failed to detect Advanced Installer in PATH",
-    "AI_UseLatestVersion": "No version number was specified. Using latest: %s"
+    "AI_UseLatestVersion": "No version number was specified. Using latest: %s",
+    "AI_CleanupDisabled": "Skipping cleanup because it was disabled: advancedinstaller.cleanup = %s"
   }
 }
