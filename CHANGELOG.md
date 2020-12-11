@@ -69,3 +69,8 @@ Bugs:
 
 Bugs:
 * Fixed bug introduced in *2.0.4* which caused pipelines that had *Output Package Folder* set to a relative path to fail.
+
+### Advanced Installer Tool Installer 2.0.6
+
+Improvements:
+* Disable task cleanup by setting variable _**advancedinstaller.cleanup = false**_
