@@ -45,3 +45,12 @@ Details about which version of Advanced Installer should be downloaded and cache
 * **Version** - Version that should be cached. You can find a complete list [here](https://www.advancedinstaller.com/version-history.html). If no version is specified the latest will be used. This step will be skipped if a manual installation is detected. Such may be the case in TFS environments where you may want to use a pre-configure build agent.
 
 * **License Key** - The license id that should be used for registration. **Simple** project types don't require a license.
+
+
+# Tutorials
+
+Check them out:
+* [How-To: Build an Advanced Installer Visual Studio Project from Azure DevOps](https://www.advancedinstaller.com/visual-studio-project-from-azure-devops-pipeline.html)
+* [Automation x2: How to automate Azure DevOps pipelines with Advanced Installer PowerShell automation](https://www.advancedinstaller.com/azure-devops-pipeline-powershell-automation.html)
+* [How to: Choose Which Advanced Installer Azure DevOps Task You Need?](https://www.advancedinstaller.com/azure-devops-tasks.html)
+* [How to configure digital signing in Advanced Installer Azure DevOps Task](https://www.advancedinstaller.com/azure-devops-configure-digital-signature.html)
