@@ -8,7 +8,7 @@
   "version": {
     "Major": 2,
     "Minor": 0,
-    "Patch": 6
+    "Patch": 7
   },
   "instanceNameFormat": "Build Advanced Installer package $(aipPath)",
   "minimumAgentVersion": "2.115.0",
@@ -105,12 +105,12 @@
     }
   ],
   "execution": {
-    "Node": {
+    "Node10": {
       "target": "AdvinstTask.js"
     }
   },
   "postjobexecution": {
-    "Node": {
+    "Node10": {
       "target": "AdvinstTaskCleanup.js"
     }
   },
