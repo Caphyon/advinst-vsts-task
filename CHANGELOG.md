@@ -70,7 +70,12 @@ Bugs:
 Bugs:
 * Fixed bug introduced in *2.0.4* which caused pipelines that had *Output Package Folder* set to a relative path to fail.
 
-### Advanced Installer Tool Installer 2.0.6
+### AAdvanced Installer Build Task 2.0.6
 
 Improvements:
 * Disable task cleanup by setting variable _**advancedinstaller.cleanup = false**_
+
+### Advanced Installer Build Task 2.0.7
+
+Improvements:
+* Migrate task to Node10 to avoid deprecation warning. Details [here](https://github.com/microsoft/azure-pipelines-tasks/blob/master/docs/migrateNode10.md).
