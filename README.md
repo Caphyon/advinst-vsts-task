@@ -42,7 +42,7 @@ Advanced configurations for build output.
 
 Details about which version of Advanced Installer should be downloaded and cached on the build agent. If [Advanced Installer Tool Installer](https://marketplace.visualstudio.com/items?itemName=caphyon.AdvancedInstallerTool) task is present in the pipeline, and no **Version** is specified here, it will take precedence.
 
-* **Version** - Version that should be cached. You can find a complete list [here](https://www.advancedinstaller.com/version-history.html). If no version is specified the latest will be used. This step will be skipped if a manual installation is detected. Such may be the case in TFS environments where you may want to use a pre-configure build agent.
+* **Version** - Version that should be cached. You can find a complete list [here](https://www.advancedinstaller.com/version-history.html).
 
 * **License Key** - The license id that should be used for registration. **Simple** project types don't require a license.
 
