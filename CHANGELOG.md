@@ -79,3 +79,8 @@ Improvements:
 
 Improvements:
 * Migrate task to Node10 to avoid deprecation warning. Details [here](https://github.com/microsoft/azure-pipelines-tasks/blob/master/docs/migrateNode10.md).
+
+### Advanced Installer Build Task 2.0.8
+
+Improvements:
+* Fix misleading documentation about the Advanced Installer vesrion. 
