@@ -1,5 +1,6 @@
 dist/
 /.vscode/
+/_agent/
 
 /.vs
 *.vsix

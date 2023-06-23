@@ -5,17 +5,17 @@
   "scripts": {
     "init:dev": "npm install",
     "clean:dev": "rmdir /Q /S node_modules",
-    "compile": "tsc -project task",
-    "clean": "rimraf dist && rimraf ./task/*.js && rimraf ./task/*.js.map",
+    "compile": "tsc",
+    "clean": "rimraf dist",
     "link": "mkdirp ./dist/task/node_modules && npm run link:install && npm run link:copy",
-    "link:copy": "copyfiles ./node_modules/winfileinfo/*.node ./node_modules/registry-js/**/* ./dist/task/",
-    "link:install": "pushd dist\\task && npm install azure-pipelines-task-lib@3.1.10 && npm install azure-pipelines-tool-lib@0.13.3 && npm install semvish@^1.1.0 && npm install compare-ver@^2.0.2 && npm install ini-parser@^0.0.2 && popd",
-    "content:task": "copyfiles ./task/*.js ./task/task.json ./task/*.png dist",
+    "link:copy": "copyfiles ./node_modules/registry-js/**/* ./dist/task/",
+    "link:install": "pushd dist\\task && npm install azure-pipelines-task-lib@4.3.1 && npm install azure-pipelines-tool-lib@2.0.4 && npm install semvish@1.1.0 && npm install compare-ver@2.0.2 && npm install ini-parser@0.0.2 && popd",
+    "content:task": "copyfiles ./task/task.json ./task/*.png dist",
     "content:vsix": "copyfiles vss-extension.json *.md license.txt ./images/*.png dist",
     "content:all": "npm run content:task && npm run content:vsix",
     "build": "npm run clean && npm run compile && npm run content:all && npm run link",
     "vsix:release": "tfx extension create --root dist --output-path dist --override {\\\"public\\\":true}",
-    "vsix:preview": "tfx extension create --extension-id AdvancedInstaller-Preview --root dist --output-path dist --override {\\\"name\\\":\\\"Preview Advanced Installer \\\", \\\"publisher\\\":\\\"caphyon-test\\\"} --rev-version",
+    "vsix:preview": "tfx extension create --extension-id AdvancedInstaller-Preview --root dist --output-path dist --override {\\\"name\\\":\\\"Preview Advanced Installer \\\", \\\"publisher\\\":\\\"caphyon-test\\\"}",
     "package:release": "npm run build && npm run vsix:release",
     "package:preview": "npm run build && npm run vsix:preview",
     "version": "node ./scripts/version.js"
@@ -35,13 +35,12 @@
   },
   "homepage": "https://github.com/caphyon/advinst-vsts-task#readme",
   "dependencies": {
-    "azure-pipelines-task-lib": "3.1.10",
-    "azure-pipelines-tool-lib": "0.13.3",
-    "compare-ver": "^2.0.2",
-    "ini-parser": "^0.0.2",
-    "registry-js": "1.0.7",
-    "semvish": "^1.1.0",
-    "winfileinfo": "^1.0.0"
+    "azure-pipelines-task-lib": "4.3.1",
+    "azure-pipelines-tool-lib": "2.0.4",
+    "compare-ver": "2.0.2",
+    "ini-parser": "0.0.2",
+    "registry-js": "1.15.1",
+    "semvish": "1.1.0"
   },
   "devDependencies": {
     "@types/node": "14.0.1",

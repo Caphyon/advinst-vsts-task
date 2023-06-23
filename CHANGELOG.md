@@ -84,3 +84,9 @@ Improvements:
 
 Improvements:
 * Fix misleading documentation about the Advanced Installer vesrion. 
+
+### Advanced Installer Build Task 2.0.9
+
+Improvements:
+* Enhanced the logic for finding the path of Advanced Installer, if it is already installed on the build agent.
+* We no longer support versions of Advanced Installer that are more than two years old. Please check the [release history](https://www.advancedinstaller.com/version-history.html) to pick a compatible version.

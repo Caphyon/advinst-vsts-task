@@ -5,38 +5,53 @@ import * as semvish from 'semvish';
 import * as cmpVer from 'compare-ver';
 import * as ini from 'ini-parser';
 import * as fs from 'fs';
-import { enumerateValues, HKEY, RegistryValueType } from 'registry-js'
-var fileInfo = require('winfileinfo/winfileinfo.node');
+import { Writable } from 'stream';
+import { enumerateValues, HKEY } from 'registry-js'
 
 // String constants
 const advinstToolId: string = 'advinst';
 const advinstToolArch: string = 'x86';
 const advinstToolSubPath: string = 'bin\\x86';
 const advinstToolCmdLineUtility: string = 'AdvancedInstaller.com';
-const advinstToolExecutable: string = 'advinst.exe';
 const advinstMSBuildTargetsVar: string = 'AdvancedInstallerMSBuildTargets';
 const advinstToolRootVar: string = 'AdvancedInstallerRoot';
 const advinstMSBuildTargetsSubPath: string = 'ProgramFilesFolder\\MSBuild\\Caphyon\\Advanced Installer';
 const advinstDownloadUrlVar: string = 'advancedinstaller.url';
 const advinstLicenseSubPath: string = 'Caphyon\\Advanced Installer\\license80.dat';
-const advinstRegVersionSwitch: string = '14.6';
 
-const advinstWowRegKeyPath: string = 'SOFTWARE\\Wow6432Node\\Caphyon\\Advanced Installer';
-const advinstRegKeyPath: string = 'SOFTWARE\\Caphyon\\Advanced Installer';
-const advinstPathRegValue: string = 'Advanced Installer Path';
+const advinstWowRegKeyPath: string = 'SOFTWARE\\Wow6432Node\\Caphyon\\Advanced Installer\\Installation Path';
+const advinstRegKeyPath: string = 'SOFTWARE\\Caphyon\\Advanced Installer\\Installation Path';
 
 export async function getAdvinstComTool(): Promise<string> {
 
+  const minAllowedVer = await _getMinAllowedAdvinstVersion();
+  taskLib.debug(taskLib.loc("AI_DebugMinRequiredAdvinstVersion",  minAllowedVer))
+  
   let toolPath: string = _getAdvinstPathFromReg();
   // Use local copy of Advanced Installer. It is pre-deployed on the agent.  
   if (toolPath) {
     taskLib.debug(taskLib.loc('AI_UseFromReg', toolPath));
+    const toolVer = _getAdvinstToolVersion(toolPath);
+    if (cmpVer.lt(toolVer, minAllowedVer) === 1){
+      throw new Error(taskLib.loc("AI_ErrInvalidDetectedVersion",  minAllowedVer, toolVer));
+    }
+    taskLib.debug(taskLib.loc("AI_DebugMinVersionCheckPassed"))
     return toolPath;
   }
 
   // Download Advanced Installer and cachet it.
+  let version : string = taskLib.getInput('advinstVersion', false);
+  if (!version) {
+    version = await _getLatestVersion();
+    taskLib.debug(taskLib.loc("AI_UseLatestVersion", version));
+  }
+
+  if (cmpVer.lt(version, minAllowedVer) === 1){
+    throw new Error(taskLib.loc("AI_ErrInvalidConfigVersion",  minAllowedVer, version));
+  }
   taskLib.debug(taskLib.loc('AI_UseFromPATH'));
-  await runAcquireAdvinst();
+  taskLib.debug(taskLib.loc("AI_DebugMinVersionCheckPassed"))
+  await runAcquireAdvinst(version);
   return advinstToolCmdLineUtility;
 }
 
@@ -49,15 +64,8 @@ export function _getAgentTemp() {
   return tempDirectory;
 }
 
-async function runAcquireAdvinst() {
-  let version: string = taskLib.getInput('advinstVersion', false);
+async function runAcquireAdvinst(version: string) {
   const license: string = taskLib.getInput('advinstLicense', false);
-
-  if (!version) {
-    version = await _getLatestVersion();
-    taskLib.debug(taskLib.loc("AI_UseLatestVersion", version));
-  }
-
   if (!version) {
     let cachedVersions: string[] = toolLib.findLocalToolVersions(advinstToolId, advinstToolArch)
     if (cachedVersions.length > 0) {
@@ -113,12 +121,7 @@ async function registerAdvinst(toolRoot: string, license: string): Promise<void>
     return;
 
   console.log(taskLib.loc("AI_RegisterTool"))
-
-  let toolVersion: string = fileInfo.getFileVersion(path.join(toolRoot, advinstToolExecutable));
   let registrationCmd: string = "/RegisterCI";
-  if (cmpVer.lt(advinstRegVersionSwitch, toolVersion) < 0) {
-    registrationCmd = "/Register";
-  }
 
   let execResult = taskLib.execSync(path.join(toolRoot, advinstToolCmdLineUtility), [registrationCmd, license]);
   if (execResult.code != 0) {
@@ -211,17 +214,25 @@ async function _getLatestVersion(): Promise<string> {
 
 function _getAdvinstPathFromReg(): string {
 
-  // Advinst registry constants
+  let path = _getLatestAdvinstPathFromReg(advinstWowRegKeyPath);
+  return path ? path : _getLatestAdvinstPathFromReg(advinstRegKeyPath);
+}
+
+function _getLatestAdvinstPathFromReg(regPath: string): string {
   let advinstComPath: string = null;
   // Search the Advanced Installer root path in in both redirected and non-redirected hives.
-  const wowRegs = enumerateValues(HKEY.HKEY_LOCAL_MACHINE, advinstWowRegKeyPath).filter(function (reg) { return reg.name === advinstPathRegValue });
-  if (wowRegs.length > 0) {
-    advinstComPath = path.join(wowRegs[0].data.toString(), advinstToolSubPath, advinstToolCmdLineUtility)
-  }
-  // Search the Advanced Installer root path in in both redirected and non-redirected hives.
-  const regs = enumerateValues(HKEY.HKEY_LOCAL_MACHINE, advinstRegKeyPath).filter(function (reg) { return reg.name === advinstPathRegValue });
+  const regs = enumerateValues(HKEY.HKEY_LOCAL_MACHINE, regPath)
+    .slice()
+    .sort((v1, v2) => {
+      return cmpVer.lt(v1.name, v2.name);
+    });
+
   if (regs.length > 0) {
-    advinstComPath = path.join(regs[0].data.toString(), advinstToolSubPath, advinstToolCmdLineUtility)
+    advinstComPath = path.join(
+      regs[0].data.toString(),
+      advinstToolSubPath,
+      advinstToolCmdLineUtility
+    );
   }
 
   if (taskLib.exist(advinstComPath)) {
@@ -229,4 +240,35 @@ function _getAdvinstPathFromReg(): string {
   }
 
   return null;
+}
+
+async function _getMinAllowedAdvinstVersion(): Promise<string | null> {
+  const RELEASE_INTERVAL_MONTHS = 24;
+
+  const minReleaseDate = new Date();
+  minReleaseDate.setMonth(minReleaseDate.getMonth() - RELEASE_INTERVAL_MONTHS);
+
+  const versionsFile: string = await toolLib.downloadTool(
+    "https://www.advancedinstaller.com/downloads/updates.ini"
+  );
+  const iniContent = ini.parse(fs.readFileSync(versionsFile, "utf-8"));
+  const r = Object.entries(iniContent).find(([k, v]) => {
+    const [day, month, year] = (v as any).ReleaseDate.split("/");
+    const releaseDate = new Date(`${year}-${month}-${day}`);
+    return minReleaseDate > releaseDate;
+  });
+
+  if (!r) {
+    return null;
+  }
+
+  return (r[1] as any).ProductVersion;
+}
+
+function _getAdvinstToolVersion(path: string): string {
+  let stream = new Writable();
+  const result = taskLib.execSync(path, ["/help"], { silent: true, outStream: stream });
+  const l = result.stdout.split("\r\n")[0];
+  const re = new RegExp(/\d+(\.\d+)+/);
+  return l.match(re)[0];
 }

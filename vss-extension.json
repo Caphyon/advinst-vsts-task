@@ -1,7 +1,7 @@
 {
   "manifestVersion": 1,
   "id": "AdvancedInstaller-BuildTask",
-  "version": "2.0.8",
+  "version": "2.0.9",
   "name": "Advanced Installer Build",
   "description": "Task for building setup packages using Advanced Installer.",
   "publisher": "caphyon",
@@ -70,8 +70,7 @@
   ],
   "files": [
     {
-      "path": "task",
-      "addressable": true
+      "path": "task"
     },
     {
       "path": "images",
