@@ -33,7 +33,7 @@ export async function getAdvinstComTool(): Promise<string> {
     taskLib.debug(taskLib.loc('AI_UseFromReg', toolPath));
     const toolVer = _getAdvinstToolVersion(toolPath);
     if (cmpVer.lt(toolVer, minAllowedVer) === 1){
-      throw new Error(taskLib.loc("AI_ErrInvalidDetectedVersion",  minAllowedVer, toolVer));
+      taskLib.warning(taskLib.loc("AI_WarningInvalidDetectedVersion",  minAllowedVer, toolVer));
     }
     taskLib.debug(taskLib.loc("AI_DebugMinVersionCheckPassed"))
     return toolPath;
@@ -47,7 +47,7 @@ export async function getAdvinstComTool(): Promise<string> {
   }
 
   if (cmpVer.lt(version, minAllowedVer) === 1){
-    throw new Error(taskLib.loc("AI_ErrInvalidConfigVersion",  minAllowedVer, version));
+    taskLib.warning(taskLib.loc("AI_WarningInvalidConfigVersion",  minAllowedVer, version));
   }
   taskLib.debug(taskLib.loc('AI_UseFromPATH'));
   taskLib.debug(taskLib.loc("AI_DebugMinVersionCheckPassed"))
@@ -119,10 +119,15 @@ async function getAdvinst(version: string, license: string): Promise<void> {
 async function registerAdvinst(toolRoot: string, license: string): Promise<void> {
   if (!license)
     return;
+  
+  const advinstRegVersionSwitch: string = '14.6';
 
   console.log(taskLib.loc("AI_RegisterTool"))
+  const toolVersion = _getAdvinstToolVersion(path.join(toolRoot, advinstToolCmdLineUtility));
   let registrationCmd: string = "/RegisterCI";
-
+  if (cmpVer.lt(advinstRegVersionSwitch, toolVersion) < 0) {
+    registrationCmd = "/Register";
+  }
   let execResult = taskLib.execSync(path.join(toolRoot, advinstToolCmdLineUtility), [registrationCmd, license]);
   if (execResult.code != 0) {
     throw new Error(taskLib.loc("AI_RegisterToolFailed", execResult.stdout));

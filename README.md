@@ -1,3 +1,6 @@
+## ***IMPORTANT: We want to provide the best experience for you and support the newest Advanced Installer features. To do so, we will no longer be supporting older versions of the software in the near future.***
+
+
 # Advanced Installer
 
 Businesses around the globe, large and small, save hundreds of hours and thousands of dollars by taking advantage of the expert knowledge built into Advanced Installer to create Windows Installer packages and patches for their products.
