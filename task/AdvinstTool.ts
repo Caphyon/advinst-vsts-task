@@ -7,6 +7,7 @@ import * as ini from 'ini-parser';
 import * as fs from 'fs';
 import { Writable } from 'stream';
 import { enumerateValues, HKEY } from 'registry-js'
+import { get } from 'http';
 
 // String constants
 const advinstToolId: string = 'advinst';
@@ -24,20 +25,19 @@ const advinstRegKeyPath: string = 'SOFTWARE\\Caphyon\\Advanced Installer\\Instal
 
 export async function getAdvinstComTool(): Promise<string> {
 
-  const minAllowedVer = await _getMinAllowedAdvinstVersion();
-  taskLib.debug(taskLib.loc("AI_DebugMinRequiredAdvinstVersion",  minAllowedVer))
-  
   let toolPath: string = _getAdvinstPathFromReg();
   // Use local copy of Advanced Installer. It is pre-deployed on the agent.  
   if (toolPath) {
     taskLib.debug(taskLib.loc('AI_UseFromReg', toolPath));
-    const toolVer = _getAdvinstToolVersion(toolPath);
-    if (cmpVer.lt(toolVer, minAllowedVer) === 1){
-      taskLib.warning(taskLib.loc("AI_WarningInvalidDetectedVersion",  minAllowedVer, toolVer));
+    if (!_toolIsInsideReleaseInterval(toolPath)) {
+      taskLib.warning(taskLib.loc("AI_WarningOutsideReleaseInterval"));
     }
     taskLib.debug(taskLib.loc("AI_DebugMinVersionCheckPassed"))
     return toolPath;
   }
+
+  const minAllowedVer = await _getMinAllowedAdvinstVersion();
+  taskLib.debug(taskLib.loc("AI_DebugMinRequiredAdvinstVersion",  minAllowedVer))
 
   // Download Advanced Installer and cachet it.
   let version : string = taskLib.getInput('advinstVersion', false);
@@ -248,10 +248,7 @@ function _getLatestAdvinstPathFromReg(regPath: string): string {
 }
 
 async function _getMinAllowedAdvinstVersion(): Promise<string | null> {
-  const RELEASE_INTERVAL_MONTHS = 24;
-
-  const minReleaseDate = new Date();
-  minReleaseDate.setMonth(minReleaseDate.getMonth() - RELEASE_INTERVAL_MONTHS);
+  const minReleaseDate = _getMinValidReleaseDate();
 
   const versionsFile: string = await toolLib.downloadTool(
     "https://www.advancedinstaller.com/downloads/updates.ini"
@@ -276,4 +273,15 @@ function _getAdvinstToolVersion(path: string): string {
   const l = result.stdout.split("\r\n")[0];
   const re = new RegExp(/\d+(\.\d+)+/);
   return l.match(re)[0];
+}
+
+function _toolIsInsideReleaseInterval(toolPath: string) : boolean {
+  return fs.statSync(toolPath).mtime > _getMinValidReleaseDate();
+}
+
+function _getMinValidReleaseDate(): Date {
+  const RELEASE_INTERVAL_MONTHS: number = 24;
+  const minReleaseDate = new Date();
+  minReleaseDate.setMonth(minReleaseDate.getMonth() - RELEASE_INTERVAL_MONTHS);
+  return minReleaseDate;
 }
