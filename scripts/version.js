@@ -30,6 +30,7 @@ function updateVsixManifest(version) {
   var json = JSON.parse(fileContent);
   json.version = version;
   fs.writeFileSync(vsixManifest, eol.crlf(JSON.stringify(json, null, 2)), 'utf-8');
+  console.log('Updated ./vss-extension.json version to ' + version);
 }
 
 function updateTask(version) {
@@ -40,6 +41,7 @@ function updateTask(version) {
   json.version.Minor = semver.minor(version);
   json.version.Patch = semver.patch(version);
   fs.writeFileSync(taskFile, eol.crlf(JSON.stringify(json, null, 2)), 'utf-8');
+  console.log('Updated ./task/task.json version to ' + version);
 }
 
 run() 

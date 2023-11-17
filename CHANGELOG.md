@@ -94,3 +94,7 @@ Improvements:
 ### Advanced Installer Build Task 2.0.11
 
 * Reverted version deprecation.
+
+### Advanced Installer Build Task 2.0.12
+
+* Use offline version deprecation check when using a pre-installed copy of Advanced Installer.
