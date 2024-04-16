@@ -84,7 +84,7 @@
       "defaultValue": "",
       "required": "false",
       "groupName": "advancedBuildSettings",
-      "helpMarkDown": "The result package location. You can specify either an ansolute path or a pertial one, relative to the repository source."
+      "helpMarkDown": "The result package location. You can specify either an absolute path or a partial one, relative to the repository source."
     },
     {
       "name": "aipExtraCommands",
