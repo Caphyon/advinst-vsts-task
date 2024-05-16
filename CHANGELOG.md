@@ -83,7 +83,7 @@ Improvements:
 ### Advanced Installer Build Task 2.0.8
 
 Improvements:
-* Fix misleading documentation about the Advanced Installer vesrion. 
+* Fix misleading documentation about the Advanced Installer vesrion.
 
 ### Advanced Installer Build Task 2.0.9
 
@@ -94,3 +94,8 @@ Improvements:
 ### Advanced Installer Build Task 2.0.11
 
 * Reverted version deprecation.
+
+### Advanced Installer Build Task 3.0.0
+
+* Added deprecation **error** for versions of Advanced Installer that are more than two years old. Please check the [release history](https://www.advancedinstaller.com/version-history.html) to pick a compatible version.
+* Updated to node16
