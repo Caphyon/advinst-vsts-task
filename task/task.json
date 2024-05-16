@@ -6,9 +6,9 @@
   "category": "Package",
   "author": "Caphyon",
   "version": {
-    "Major": 2,
+    "Major": 3,
     "Minor": 0,
-    "Patch": 11
+    "Patch": 0
   },
   "instanceNameFormat": "Build Advanced Installer package $(aipPath)",
   "minimumAgentVersion": "2.144.0",
