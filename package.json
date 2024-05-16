@@ -9,7 +9,7 @@
     "clean": "rimraf dist",
     "link": "mkdirp ./dist/task/node_modules && npm run link:install && npm run link:copy",
     "link:copy": "copyfiles ./node_modules/registry-js/**/* ./dist/task/",
-    "link:install": "pushd dist\\task && npm install azure-pipelines-task-lib@4.3.1 && npm install azure-pipelines-tool-lib@2.0.4 && npm install semvish@1.1.0 && npm install compare-ver@2.0.2 && npm install ini-parser@0.0.2 && popd",
+    "link:install": "pushd dist\\task && npm install azure-pipelines-task-lib@4.12.0 && npm install azure-pipelines-tool-lib@2.0.7 && npm install semvish@1.1.0 && npm install compare-ver@2.0.2 && npm install config-ini-parser@1.6.1 && popd",
     "content:task": "copyfiles ./task/task.json ./task/*.png dist",
     "content:vsix": "copyfiles vss-extension.json *.md license.txt ./images/*.png dist",
     "content:all": "npm run content:task && npm run content:vsix",
@@ -35,20 +35,21 @@
   },
   "homepage": "https://github.com/caphyon/advinst-vsts-task#readme",
   "dependencies": {
-    "azure-pipelines-task-lib": "4.3.1",
-    "azure-pipelines-tool-lib": "2.0.4",
+    "azure-pipelines-task-lib": "4.12.0",
+    "azure-pipelines-tool-lib": "2.0.7",
     "compare-ver": "2.0.2",
-    "ini-parser": "0.0.2",
-    "registry-js": "1.15.1",
+    "config-ini-parser": "1.6.1",
+    "registry-js": "1.16.0",
     "semvish": "1.1.0"
   },
   "devDependencies": {
-    "@types/node": "14.0.1",
+    "@types/ini": "4.1.0",
+    "@types/node": "20.12.12",
     "copyfiles": "2.4.1",
-    "eol": "^0.9.1",
-    "mkdirp": "^0.5.1",
-    "rimraf": "^2.6.1",
-    "tfx-cli": "^0.12.0",
-    "typescript": "^4.0.0"
+    "eol": "0.9.1",
+    "mkdirp": "3.0.1",
+    "rimraf": "5.0.7",
+    "tfx-cli": "0.17.0",
+    "typescript": "5.4.5"
   }
 }
