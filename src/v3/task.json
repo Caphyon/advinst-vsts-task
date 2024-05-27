@@ -6,12 +6,12 @@
   "category": "Package",
   "author": "Caphyon",
   "version": {
-    "Major": 2,
+    "Major": 3,
     "Minor": 0,
-    "Patch": 11
+    "Patch": 0
   },
   "instanceNameFormat": "Build Advanced Installer package $(aipPath)",
-  "minimumAgentVersion": "2.115.0",
+  "minimumAgentVersion": "2.144.0",
   "runsOn": [
     "Agent",
     "DeploymentGroup"
@@ -105,13 +105,19 @@
     }
   ],
   "execution": {
-    "Node10": {
-      "target": "AdvinstTask.js"
+    "Node16": {
+      "target": "main.js"
+    },
+    "Node20": {
+      "target": "main.js"
     }
   },
   "postjobexecution": {
-    "Node10": {
-      "target": "AdvinstTaskCleanup.js"
+    "Node16": {
+      "target": "post.js"
+    },
+    "Node20": {
+      "target": "post.js"
     }
   },
   "messages": {
@@ -148,7 +154,7 @@
     "AI_ErrInvalidConfigVersion": "Invalid Advanced Installer version configured. Minimum required version: %s. Configured version: %s.",
     "AI_DebugMinRequiredAdvinstVersion": "Minimum required Advanced Installer version: %s.",
     "AI_DebugMinVersionCheckPassed": "Minimum required Advanced Installer version fulfilled.",
-    "AI_WarningInvalidDetectedVersion": "We want to provide the best experience for you and support the newest Advanced Installer features. To do so, we will no longer be supporting older versions of the software in the near future. Please note that the minimum required version is %s and the detected version is %s.",
-    "AI_WarningInvalidConfigVersion": "We want to provide the best experience for you and support the newest Advanced Installer features. To do so, we will no longer be supporting older versions of the software in the near future. Please note that the minimum required version is %s and the configured version is %s."
+    "AI_ErrorInvalidDetectedVersion": "We want to provide the best experience for you and support the newest Advanced Installer features. To do so, we are no longer supporting older versions of the software. Please note that the minimum required version is %s and the configured version is %s.",
+    "AI_ErrorInvalidConfigVersion": "We want to provide the best experience for you and support the newest Advanced Installer features. To do so, we are no longer supporting older versions of the software. Please note that the minimum required version is %s and the configured version is %s."
   }
 }

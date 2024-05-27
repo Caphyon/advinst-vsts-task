@@ -1,11 +1,11 @@
-## ***IMPORTANT: We want to provide the best experience for you and support the newest Advanced Installer features. To do so, we will no longer be supporting older versions of the software in the near future.***
+## ***IMPORTANT: We want to provide the best experience for you and support the newest Advanced Installer features. To do so, we no longer support older versions of the software.***
 
 
 # Advanced Installer
 
 Businesses around the globe, large and small, save hundreds of hours and thousands of dollars by taking advantage of the expert knowledge built into Advanced Installer to create Windows Installer packages and patches for their products.
 
-# How to use 
+# How to use
 
 The AI Build Task allows you to create a custom build step for TFS and Azure DevOPs.
 

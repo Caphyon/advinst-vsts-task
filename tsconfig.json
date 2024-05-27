@@ -2,9 +2,8 @@
   "compilerOptions": {
     "target": "ES6",
     "module": "commonjs",
-    "outDir": "./dist/task",
+    "outDir": "./dist",
+    "rootDir": "./src",
     "sourceMap": true
   },
-
-  "include": ["task/"]
 }

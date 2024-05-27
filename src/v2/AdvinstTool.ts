@@ -3,7 +3,7 @@ import * as toolLib from 'azure-pipelines-tool-lib/tool';
 import * as path from 'path';
 import * as semvish from 'semvish';
 import * as cmpVer from 'compare-ver';
-import * as ini from 'ini-parser';
+import { ConfigIniParser } from 'config-ini-parser';
 import * as fs from 'fs';
 import { Writable } from 'stream';
 import { enumerateValues, HKEY } from 'registry-js'
@@ -26,9 +26,9 @@ export async function getAdvinstComTool(): Promise<string> {
 
   const minAllowedVer = await _getMinAllowedAdvinstVersion();
   taskLib.debug(taskLib.loc("AI_DebugMinRequiredAdvinstVersion",  minAllowedVer))
-  
+
   let toolPath: string = _getAdvinstPathFromReg();
-  // Use local copy of Advanced Installer. It is pre-deployed on the agent.  
+  // Use local copy of Advanced Installer. It is pre-deployed on the agent.
   if (toolPath) {
     taskLib.debug(taskLib.loc('AI_UseFromReg', toolPath));
     const toolVer = _getAdvinstToolVersion(toolPath);
@@ -71,7 +71,7 @@ async function runAcquireAdvinst(version: string) {
     if (cachedVersions.length > 0) {
       // Use the latest cached version.
       version = cachedVersions.sort().reverse()[0];
-      taskLib.debug("Latest cached version: " + version); 
+      taskLib.debug("Latest cached version: " + version);
     }
   }
 
@@ -119,7 +119,7 @@ async function getAdvinst(version: string, license: string): Promise<void> {
 async function registerAdvinst(toolRoot: string, license: string): Promise<void> {
   if (!license)
     return;
-  
+
   const advinstRegVersionSwitch: string = '14.6';
 
   console.log(taskLib.loc("AI_RegisterTool"))
@@ -211,10 +211,12 @@ async function _extractAdvinst(sourceMsi: string): Promise<string> {
 }
 
 async function _getLatestVersion(): Promise<string> {
-  let versionsFile: string = await toolLib.downloadTool('https://www.advancedinstaller.com/downloads/updates.ini');
-  let iniContent = ini.parse(fs.readFileSync(versionsFile, 'utf-8'));
-  let firstSection = iniContent[Object.keys(iniContent)[0]];
-  return firstSection['ProductVersion'];
+  const versionsFile: string = await toolLib.downloadTool(
+    'https://www.advancedinstaller.com/downloads/updates.ini'
+  );
+  const iniParser = new ConfigIniParser();
+  const ini = iniParser.parse(fs.readFileSync(versionsFile, 'utf-8'));
+  return ini.get(ini.sections()[0], 'ProductVersion') as string;
 }
 
 function _getAdvinstPathFromReg(): string {
@@ -254,20 +256,21 @@ async function _getMinAllowedAdvinstVersion(): Promise<string | null> {
   minReleaseDate.setMonth(minReleaseDate.getMonth() - RELEASE_INTERVAL_MONTHS);
 
   const versionsFile: string = await toolLib.downloadTool(
-    "https://www.advancedinstaller.com/downloads/updates.ini"
+    'https://www.advancedinstaller.com/downloads/updates.ini'
   );
-  const iniContent = ini.parse(fs.readFileSync(versionsFile, "utf-8"));
-  const r = Object.entries(iniContent).find(([k, v]) => {
-    const [day, month, year] = (v as any).ReleaseDate.split("/");
-    const releaseDate = new Date(`${year}-${month}-${day}`);
-    return minReleaseDate > releaseDate;
+  const iniParser = new ConfigIniParser();
+  const ini = iniParser.parse(fs.readFileSync(versionsFile, 'utf-8'));
+  const r = ini.sections().find(s => {
+    const releaseDate = ini.get(s, 'ReleaseDate');
+    const [day, month, year] = releaseDate.split('/');
+    return minReleaseDate > new Date(`${year}-${month}-${day}`);
   });
 
   if (!r) {
     return null;
   }
 
-  return (r[1] as any).ProductVersion;
+  return ini.get(r, 'ProductVersion') as string;
 }
 
 function _getAdvinstToolVersion(path: string): string {

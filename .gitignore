@@ -12,3 +12,4 @@ npm-debug.log
 task/*.js.map
 task/*.js
 package-lock.json
+_package
