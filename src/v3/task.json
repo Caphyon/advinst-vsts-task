@@ -106,12 +106,18 @@
   ],
   "execution": {
     "Node16": {
-      "target": "AdvinstTask.js"
+      "target": "main.js"
+    },
+    "Node20": {
+      "target": "main.js"
     }
   },
   "postjobexecution": {
     "Node16": {
-      "target": "AdvinstTaskCleanup.js"
+      "target": "post.js"
+    },
+    "Node20": {
+      "target": "post.js"
     }
   },
   "messages": {

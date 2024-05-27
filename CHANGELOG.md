@@ -98,4 +98,5 @@ Improvements:
 ### Advanced Installer Build Task 3.0.0
 
 * Added deprecation **error** for versions of Advanced Installer that are more than two years old. Please check the [release history](https://www.advancedinstaller.com/version-history.html) to pick a compatible version.
-* Updated to node16
+* Target node16 ans node20
+* Add support for v2 and v3 versions side by side

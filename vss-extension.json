@@ -70,7 +70,12 @@
   ],
   "files": [
     {
-      "path": "task"
+      "path": "dist/v2",
+      "packagePath": "task/v2"
+    },
+    {
+      "path": "dist/v3",
+      "packagePath": "task/v3"
     },
     {
       "path": "images",
