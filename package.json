@@ -5,7 +5,7 @@
   "scripts": {
     "compile": "tsc",
     "clean": "rimraf dist",
-    "link": "pushd dist\\v2 && npm install && popd && pushd dist\\v3 && npm install && popd",
+    "link": "pushd dist/v2 && npm install && popd && pushd dist/v3 && npm install && popd",
     "copy": "copyfiles -u 1 src/**/*.{json,png} dist",
     "build": "npm run clean && npm run compile && npm run copy && npm run link",
     "vsix:release": "tfx extension create --output-path _package/advinst-vsts-task-release.vsix --override {\\\"public\\\":true}",
