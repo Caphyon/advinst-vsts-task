@@ -8,7 +8,7 @@
   "version": {
     "Major": 3,
     "Minor": 0,
-    "Patch": 0
+    "Patch": 1
   },
   "instanceNameFormat": "Build Advanced Installer package $(aipPath)",
   "minimumAgentVersion": "2.144.0",
