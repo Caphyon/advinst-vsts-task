@@ -100,3 +100,7 @@ Improvements:
 * Added deprecation **error** for versions of Advanced Installer that are more than two years old. Please check the [release history](https://www.advancedinstaller.com/version-history.html) to pick a compatible version.
 * Target node16 ans node20
 * Add support for v2 and v3 versions side by side
+
+### Advanced Installer Build Task 3.0.1
+
+* Update target node versions in order to avoid pipeline deprecation warnings.
