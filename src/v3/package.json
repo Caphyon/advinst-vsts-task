@@ -1,11 +1,11 @@
 {
   "name": "advinst-vsts-task-v2",
   "dependencies": {
-    "azure-pipelines-task-lib": "4.12.1",
-    "azure-pipelines-tool-lib": "2.0.7",
+    "azure-pipelines-task-lib": "5.2.8",
+    "azure-pipelines-tool-lib": "2.0.12",
     "compare-ver": "2.0.2",
     "config-ini-parser": "1.6.1",
-    "registry-js": "1.16.0",
+    "registry-js": "1.16.1",
     "semvish": "1.1.0"
   }
 }

@@ -104,3 +104,8 @@ Improvements:
 ### Advanced Installer Build Task 3.0.1
 
 * Update target node versions in order to avoid pipeline deprecation warnings.
+
+### Advanced Installer Build Task 2.0.13 / 3.0.2
+
+Bugs:
+* Improved updates INI decoding by using UTF-16LE BOM detection and falling back to UTF-8 when BOM is missing.
