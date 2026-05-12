@@ -3,9 +3,8 @@ import * as toolLib from 'azure-pipelines-tool-lib/tool';
 import * as path from 'path';
 import * as semvish from 'semvish';
 import * as cmpVer from 'compare-ver';
-import { ConfigIniParser } from 'config-ini-parser';
-import * as fs from 'fs';
 import { Writable } from 'stream';
+import { AdvinstReleases } from './advinstReleases';
 import { enumerateValues, HKEY } from 'registry-js'
 
 // String constants
@@ -18,14 +17,14 @@ const advinstToolRootVar: string = 'AdvancedInstallerRoot';
 const advinstMSBuildTargetsSubPath: string = 'ProgramFilesFolder\\MSBuild\\Caphyon\\Advanced Installer';
 const advinstDownloadUrlVar: string = 'advancedinstaller.url';
 const advinstLicenseSubPath: string = 'Caphyon\\Advanced Installer\\license80.dat';
-const advinstIniUrlVar: string = 'advancedinstaller.ini.url';
 
 const advinstWowRegKeyPath: string = 'SOFTWARE\\Wow6432Node\\Caphyon\\Advanced Installer\\Installation Path';
 const advinstRegKeyPath: string = 'SOFTWARE\\Caphyon\\Advanced Installer\\Installation Path';
 
 export async function getAdvinstComTool(): Promise<string> {
+  const advinstReleases = new AdvinstReleases();
 
-  const minAllowedVer = await _getMinAllowedAdvinstVersion();
+  const minAllowedVer = await advinstReleases.getMinAllowedAdvinstVersion();
   taskLib.debug(taskLib.loc("AI_DebugMinRequiredAdvinstVersion",  minAllowedVer))
 
   let toolPath: string = _getAdvinstPathFromReg();
@@ -43,7 +42,7 @@ export async function getAdvinstComTool(): Promise<string> {
   // Download Advanced Installer and cachet it.
   let version : string = taskLib.getInput('advinstVersion', false);
   if (!version) {
-    version = await _getLatestVersion();
+    version = await advinstReleases.getLatestVersion();
     taskLib.debug(taskLib.loc("AI_UseLatestVersion", version));
   }
 
@@ -211,13 +210,6 @@ async function _extractAdvinst(sourceMsi: string): Promise<string> {
   return msiExtractionPath;
 }
 
-async function _getLatestVersion(): Promise<string> {
-  const updatesFileContent = await _getUpdatesFileContent();
-  const iniParser = new ConfigIniParser();
-  const ini = iniParser.parse(updatesFileContent);
-  return ini.get(ini.sections()[0], 'ProductVersion') as string;
-}
-
 function _getAdvinstPathFromReg(): string {
 
   let path = _getLatestAdvinstPathFromReg(advinstWowRegKeyPath);
@@ -248,28 +240,6 @@ function _getLatestAdvinstPathFromReg(regPath: string): string {
   return null;
 }
 
-async function _getMinAllowedAdvinstVersion(): Promise<string | null> {
-  const RELEASE_INTERVAL_MONTHS = 24;
-
-  const minReleaseDate = new Date();
-  minReleaseDate.setMonth(minReleaseDate.getMonth() - RELEASE_INTERVAL_MONTHS);
-
-  const updatesFileContent = await _getUpdatesFileContent();
-  const iniParser = new ConfigIniParser();
-  const ini = iniParser.parse(updatesFileContent);
-  const r = ini.sections().find(s => {
-    const releaseDate = ini.get(s, 'ReleaseDate');
-    const [day, month, year] = releaseDate.split('/');
-    return minReleaseDate > new Date(`${year}-${month}-${day}`);
-  });
-
-  if (!r) {
-    return null;
-  }
-
-  return ini.get(r, 'ProductVersion') as string;
-}
-
 function _getAdvinstToolVersion(path: string): string {
   let stream = new Writable();
   const result = taskLib.execSync(path, ["/help"], { silent: true, outStream: stream });
@@ -278,21 +248,3 @@ function _getAdvinstToolVersion(path: string): string {
   return l.match(re)[0];
 }
 
-async function _getUpdatesFileContent(): Promise<string> {
-  const advinstIniUrl =
-    taskLib.getVariable(advinstIniUrlVar) ||
-    'https://www.advancedinstaller.com/downloads/updates.ini';
-  taskLib.debug('advinstIniUrl = ' + advinstIniUrl);
-  const updatesFile: string = await toolLib.downloadTool(advinstIniUrl);
-  return _readTextFileWithDetectedEncoding(updatesFile);
-}
-
-function _readTextFileWithDetectedEncoding(filePath: string): string {
-  const raw = fs.readFileSync(filePath);
-  const encoding: BufferEncoding = _hasUtf16LeBom(raw) ? 'utf16le' : 'utf8';
-  return raw.toString(encoding);
-}
-
-function _hasUtf16LeBom(raw: Buffer): boolean {
-  return raw.length >= 2 && raw[0] === 0xff && raw[1] === 0xfe;
-}

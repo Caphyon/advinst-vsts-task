@@ -2,8 +2,9 @@
   "compilerOptions": {
     "target": "ES6",
     "module": "commonjs",
-    "outDir": "./dist",
+    "sourceMap": false,
     "rootDir": "./src",
-    "sourceMap": true
+    "outDir": "./dist"
   },
+  "exclude": ["tests", "node_modules"]
 }
